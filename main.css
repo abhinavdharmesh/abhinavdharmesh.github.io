@@ -1,0 +1,157 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+body {
+    font-family: Poppins, sans-serif;
+    font-size: 100%;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    transition: all .2s ease-in-out;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.main-header {
+    align-items: center;
+    background: #f8f8f8;
+    display: flex;
+    float: left;
+    height: 100vh;
+    padding-left: 40px;
+    position: fixed;
+    width: 22%;
+}
+
+.logo {
+    left: 40px;
+    position: absolute;
+    top: 40px;
+    width: 100px;
+}
+
+nav ul li {
+    font-size: 1.3rem;
+    list-style: none;
+    letter-spacing: .3px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+
+nav ul li a {
+    color: #DB1514;
+    font-size: 15px;
+}
+
+nav ul li a:hover {
+    color: #0260e8;
+}
+
+main {
+    float: right;
+    padding: 171px 45px 70px 45px;
+    width: 78%;
+}
+
+main a {
+    color: #0260e8;
+}
+
+main header {
+    margin-bottom: 27px;
+}
+
+main header h1 {
+    font-weight: normal;
+    font-size: 1.8rem;
+    color: #DB1514;
+    letter-spacing: .3px;
+    text-transform: capitalize;
+    padding-bottom: 5px;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+section {
+    margin-bottom: 26px;
+}
+
+section p {
+    line-height: 1.8;
+}
+
+.template-info li {
+    list-style: none;
+    letter-spacing: .2px;
+    margin-bottom: 8px;
+}
+
+.template-info li span {
+    font-weight: 500;
+    text-transform: capitalize;
+    margin-right: 2px;
+}
+
+.introduction p {
+    margin-top: 20px;
+    width: 62%;
+}
+
+.description p {
+    width: 69%;
+}
+
+.features ul,
+.html-structure ul {
+    padding-left: 18px;
+}
+
+.features ul li,
+.html-structure ul li {
+    text-transform: capitalize;
+    margin-bottom: 10px;
+}
+
+.structure-header {
+    display: inline-block;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.html-structure ul li:nth-of-type(2) .structure-header {
+    margin-top: 5px;
+}
+
+.css-files h2,
+.js-files h2,
+.sources h2 {
+    font-size: 1rem;
+    letter-spacing: .2px;
+    margin-bottom: 2px;
+}
+
+.css-files p,
+.js-files p,
+.sources p {
+    margin-bottom: 13px;
+}
+
+.sources a {
+    display: block;
+}
