@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Visitor Counter</title>
+
+</head>
+
+<body>
+
+  <div id="visitor-counter"></div>
+
+  <script>
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.open("GET", "php/count.php", true);
+
+    xhttp.send();
+
+    xhttp.onreadystatechange = function() {
+
+      if (this.readyState == 4 && this.status == 200) {
+
+        document.getElementById("visitor-counter").innerHTML = "Visitors: " + this.responseText;
+
+      }
+
+    };
+
+  </script>
+
+</body>
+
+</html>
+
