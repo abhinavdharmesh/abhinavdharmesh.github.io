@@ -8,7 +8,7 @@ echo "Referrer: " . $referrer . "<br>";
 echo "Time spent: " . $time_spent . "<br>";
 echo "User agent: " . $user_agent . "<br>";
 
-$servername = "db4free,net";
+$servername = "db4free.net";
 $username = "abhinavd";
 $password = "qwerty12345";
 $dbname = "deeznuts";
