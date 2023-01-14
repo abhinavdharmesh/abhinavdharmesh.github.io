@@ -3,6 +3,49 @@
 <html lang="en">
 
 <head>
+  <script>
+
+        var visitData = {
+
+      "referrer": document.referrer,
+
+      "time_spent": 15,
+
+      "user_agent": navigator.userAgent
+
+    };
+
+    
+
+    fetch("php/datafetch.php", {
+
+      method: "POST",
+
+      body: JSON.stringify(visitData),
+
+      headers: {
+
+        "Content-Type": "application/json"
+
+      }
+
+    }).then(response => {
+
+      if (!response.ok) {
+
+        throw new Error(`HTTP error! status: ${response.status}`);
+
+      }
+
+      console.log("Data sent successfully!");
+
+    }).catch(error => {
+
+      console.log("Error sending data: " + error);
+
+    });
+
+    </script>
   
   <link rel="shortcut icon" type="image/x-icon" href="https://icons.iconarchive.com/icons/google/noto-emoji-smileys/512/10094-clown-face-icon.png">
 
