@@ -1,1 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+
+      async function sendRequest() {
+
+        const prompt = document.getElementById("prompt").value;
+
+        const apiKey = "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";
+
+        try {
+
+          const response = await axios.post('/proxy', {
+
+            url: 'https://api.openai.com/v1/engines/davinci/completions',
+
+            method: 'post',
+
+            data: {
+
+              prompt: prompt,
+
+              api_key: apiKey
+
+            }
+
+          });
+
+          const text = response.data.choices[0].text;
+
+          document.getElementById("response").innerText = text;
+
+        } catch (error) {
+
+          console.log(error);
+
+        }
+
+      }
+
+    </script>
+
+  </head>
+
+  <body>
+
+    <textarea id="prompt" rows="4" cols="50"></textarea>
+
+    <button onclick="sendRequest()">Ask OpenAI</button>
+
+    <p id="response"></p>
+
+  </body>
+
+</html>
+
 
