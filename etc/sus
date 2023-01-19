@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <style>
+
+      /* Gallery container */
+
+      .gallery {
+
+        display: flex;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        align-items: center;
+
+      }
+
+      /* Gallery item */
+
+      .item {
+
+        position: relative;
+
+        width: 25%;
+
+        height: 0;
+
+        padding-bottom: 25%;
+
+        overflow: hidden;
+
+      }
+
+      /* Image */
+
+      .item img {
+
+        position: absolute;
+
+        top: 0;
+
+        left: 0;
+
+        width: 100%;
+
+        height: 100%;
+
+        object-fit: cover;
+
+        transition: transform 0.5s ease;
+
+      }
+
+      /* Image caption */
+
+      .item figcaption {
+
+        position: absolute;
+
+        bottom: 0;
+
+        left: 0;
+
+        width: 100%;
+
+        padding: 10px;
+
+        background-color: rgba(0,0,0,0.5);
+
+        color: #fff;
+
+        font-size: 14px;
+
+        text-align: center;
+
+        visibility: hidden;
+
+        opacity: 0;
+
+        transition: visibility 0s 05s, opacity 0.5s ease;
+
+      }
+
+      /* Show caption on hover */
+
+      .item:hover img {
+
+        transform: scale(1.26);
+
+      }
+
+      .item:hover figcaption {
+
+        visibility: visible;
+
+        opacity: 1;
+
+        transition-delay: 0s;
+
+      }
+
+      /* Responsive styles */
+
+      @media (max-width: 900px) {
+
+        .item {
+
+          width: 33.33%;
+
+          padding-bottom: 33.33%;
+
+        }
+
+      }
+
+      @media (max-width: 600px) {
+
+        .item {
+
+          width: 50%;
+
+          padding-bottom: 50%;
+
+        }
+
+      }
+
+      @media (max-width: 400px) {
+
+        .item {
+
+          width: 100%;
+
+          padding-bottom: 100%;
+
+        }
+
+      }
+
+      /* Styles for the body */
+
+      body {
+
+        margin: 0;
+
+        overflow: hidden;
+
+      }
+
+      /* Styles for each word */
+
+      .word {
+
+        position: absolute;
+
+        font-size: 18px;
+
+        font-weight: normal;
+
+        text-transform: none;
+
+        animation: move 10s linear infinite;
+
+      }
+
+      /* Animation to move the words across the screen */
+
+      @keyframes move {
+
+        from {
+
+          transform: translateX(-20%);
+
+        }
+
+        to {
+
+          transform: translateX(10%);
+
+        }
+
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="gallery">
+
+      <figure class="item">
+
+        <img src="https://en.meming.world/images/en/thumb/b/bc/Mike_Wazowski-Sulley_Face_Swap.jpg/300px-Mike_Wazowski-Sulley_Face_Swap.jpg" alt="Image 1">
+
+        <figcaption>specimen 1</figcaption>
+
+      </figure>
+
+      <figure class="item">
+
+        <img src="https://i.pinimg.com/originals/35/cd/d9/35cdd98d7ef0f8624e4e0008004006bc.jpg" alt="Image 2">
+
+        <figcaption>specimen 2</figcaption>
+
+      </figure>
+
+      <figure class="item">
+
+        <img src="https://i.pinimg.com/736x/89/15/a5/8915a5433de8e0a345f55c286849423a.jpg" alt="Image 3">
+
+        <figcaption>specimen 3</figcaption>
+
+      </figure>
+
+    </div>
+
+  <p><marquee></marquee></p>
+
+      <script>
+
+      // Get the text
+
+      var text = "हे भगवान 🤔यहां तो कमेंट भी करने मे डर😱 लग रहा है अगर गांव🛖 वाले मेरा कमेंट देखेंगे🧐 तो क्या सोचेंगे कि मैं भी यह सब देखता🧐 हूं क्याफिर सोचा 🤔 वो भी तो आखिर आएंगे तभी तो देखेंगे 🤨फिर बोल दुंगा की तू भी तो आखिर देखा😎 ही है😁😁Hasde😄 chehreya😃 Da matlab🤔 eh naii❌🚫 hunda ki ohna nu😔 ki takleef😖 nhi hundi, ohda matlab🤔 eh hunda ki unha nu takleefan😖😔 de naal deal🤝💼 karna ohnda Get well soon King :)इक जींप खंडी मेरी थाणे दे विच बदलेदिमे तोलेईना निमें डाक्कू 😎👈🏽इक जींप खंडी मेरी थाणे दे विच बदलेदिमे तोलेईना निमें डाक्कू 😎👈🏽अभि एक पल की आजादीफिर 2 साल की बंदिगीअभी बाद में टाइम नही मिलेगा ना 🥸रांझा मिया छड्डो यारी,🖖🏽 चंगी नहियो इश्क बीमारी,🙏🏼रांझा मिया छड्डो यारी, 🙏🏼चंगी नहियो इश्क बीमारी,🖖🏽 इश्क ना चढदे कुछ भी पल्ले...🙂हो गई तेरी बल्ले, हो जाएगी बल्ले...🤡🤌🏽हो गई तेरी बल्ले, हो जाएगी बल्ले🌚☝🏽The words rum and death should  to youThe words rum and death should mean the same to youकोटि कोटि धन्यवाद जो आपने अपनी जान जोखिम मे डालकर इतनी महत्वपूर्ण सुचना हमें दी। ये अद्भुत समाचार सुनकर तीनों लोको मे बहुत प्रसन्नाता हैं। समस्त नर, नारी, सुर, असुर, देवता, मुनि, गंधर्व प्रसन्न हुए। आपके समाचार को सुनकर पुरें ब्राह्मण मे प्रसन्नता हैं पुरा संसार प्रकाशमान हो गया हैं। आपका यह समाचार प्रशंसनीय एवं अविस्मरणीय हैं मानो चारों ओर एक दिव्य ज्योति प्रजवल्लित हुई हो। आगे भी सृष्टि के कल्या हेतु ऐसे समाचार देते रहे। तीनो लोक आपके ऋणी रहेंगे। इतनी ज़रूरी ओर मानव जाति हेतु कल्याणकारी खबर देने के लिए आप का बहुत बहुत धन्यवाद। अगर ये खबर भारत के लोगो को ना मिलती तो भारत की समस्त मानव और जीव जाती अपने समूचे जीवन अज्ञा";
+
+      // Split the text into an array of words
+
+      var words = text.split(" ");
+
+      // Create an array to store the randomly selected words
+
+      var selectedWords = [];
+
+      // Select a random number of words from the array
+
+      var numWords = words.length;
+
+      for (var i = 0; i < numWords; i++) {
+
+        // Select a word from the array
+
+        var word = words[i];
+
+        // Create a new element for the word
+
+        var wordElement = document.createElement("span");
+
+        wordElement.classList.add("word");
+
+        wordElement.textContent = word;
+
+        // Add the word element to the body
+
+        document.body.appendChild(wordElement);
+
+        // Add the word to the selectedWords array
+
+        selectedWords.push(word);
+
+        // Generate random x and y positions for the word
+
+        var x = Math.floor(Math.random() * window.innerWidth);
+
+var y = Math.floor(Math.random() * window.innerHeight);
+
+    // Apply the x and y positions to the word element
+
+    wordElement.style.left = x + "px";
+
+    wordElement.style.top = y + "px";
+
+  }
+
+</script>
+
+  </body>
+
+</html>
+
