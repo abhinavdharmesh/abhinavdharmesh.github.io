@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+	<title>Search YouTube Videos</title>	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+	<script>
+
+		var player;
+
+		function onYouTubeIframeAPIReady() {
+
+			player = new YT.Player('player', {
+
+				height: '360',
+
+				width: '640',
+
+				events: {
+
+					'onReady': onPlayerReady
+
+				}
+
+			});
+
+		}
+
+		function onPlayerReady(event) {
+
+			$('#playBtn').click(function() {
+
+				player.loadVideoById($('#videoId').val());
+
+			});
+
+			$('#fullScreenBtn').click(function() {
+
+				player.playVideo();
+
+				player.setSize(screen.width, screen.height);
+
+			});
+
+		}		
+
+				$(document).ready(function() {
+
+			$("#searchBtn").click(function() {
+
+				var search_query = $("#searchQuery").val();
+
+				var api_key = "AIzaSyAFNeYg8QqzI9K35UnFe7H7Yy2Mf-tnzFk";
+
+				var youtube_url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=" + search_query + "&key=" + api_key + "&maxResults=10";
+
+				$.get(youtube_url, function(data) {
+
+					var video_list = data.items;
+
+					var result_html = "";
+
+					for (var i = 0; i < video_list.length; i++) {
+
+						var video = video_list[i];
+
+						var video_title = video.snippet.title;
+
+						var video_id = video.id.videoId;
+
+						var video_thumbnail = video.snippet.thumbnails.medium.url;
+
+						var video_url = "https://www.youtube.com/watch?v=" + video_id;
+
+						result_html += "<div><img src='" + video_thumbnail + "'><br><a href='#' class='playVideo' data-id='" + video_id + "'>" + video_title + "</a></div>";
+
+					}
+
+					$("#searchResults").html(result_html);
+
+					$('.playVideo').click(function() {
+
+						var video_id = $(this).data('id');
+
+						$('#videoId').val(video_id);
+
+						player.loadVideoById(video_id);
+
+					});
+
+				});
+
+			});
+
+		});
+
+	</script>
+
+	<script src="https://www.youtube.com/iframe_api"></script>
+
+</head>
+
+<body>
+
+	<h1>Search YouTube Videos</h1>
+
+	<label for="searchQuery">Search Query:</label>
+
+	<input type="text" id="searchQuery">
+
+	<button id="searchBtn">Search</button>
+
+	<div id="searchResults"></div>
+
+	<div id="playerContainer">
+
+		<div id="player"></div>
+
+		<input type="hidden" id="videoId" value="">
+
+	</div>
+
+</body>
+
+</html>
