@@ -1,14 +1,43 @@
 
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Video Player</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  </style>
 </head>
 <body>
-  <video width="640" height="360" controls>
+  <video width="100%" height="100%" controls autoplay muted playsinline>
     <source src="etc/Untitled.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const video = document.querySelector('video');
+      video.requestFullscreen().catch(err => {
+        console.log('Error attempting to enable fullscreen:', err.message);
+      });
+    });
+
+    function removeHtmlExtension() {
+      var path = window.location.pathname;
+      if (path.endsWith(".html")) {
+        path = path.slice(0, -5);
+        window.history.replaceState(null, null, path);
+      }
+    }
+
+    removeHtmlExtension();
+  </script>
 </body>
 </html>
