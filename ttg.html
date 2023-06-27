@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="0;URL='https://github.com/abhinavdharmesh/Time-Table-Generator'" />
+ </head>
+  <script>
+  function removeHtmlExtension() {
+    var path = window.location.pathname;
+    if (path.endsWith(".html")) {
+      path = path.slice(0, -5);
+      window.history.replaceState(null, null, path);
+    }
+  }
+  removeHtmlExtension();
+  </script>
+<style>
+        body {
+            background-image: url('svg/speed.svg');
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: calc(50vh - 24px); /* Adjust the value to position the text vertically */
+        }
+
+        .animated-text {
+            font-size: 24px; /* Adjust the font size as desired */
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            animation: typing 1s infinite alternate;
+        }
+
+        .animated-text:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        @keyframes typing {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+<body>
+    <div class="container">
+        <div class="animated-text">You are been redirected to time table generator</div>
+    </div>
+</body>
+</html>
