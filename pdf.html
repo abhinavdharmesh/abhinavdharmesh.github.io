@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Download Document</title>
+      <script>
+        function removeHtmlExtension() {
+            var path = window.location.pathname;
+            if (path.endsWith(".html")) {
+                path = path.slice(0, -5);
+                window.history.replaceState(null, null, path);
+            }
+        }
+        removeHtmlExtension();
+      </script>
+</head>
+<body>
+  <a href="https://github.com/dharmeshabhinav/assets/blob/main/Untitled%20design.pdf" download>Click here to download the document</a>
+  <script>
+    window.onload = function() {
+      var link = document.querySelector('a[href="https://github.com/dharmeshabhinav/assets/blob/main/Untitled%20design.pdf"]');
+      link.click();
+    }
+  </script>
+</body>
+</html>
