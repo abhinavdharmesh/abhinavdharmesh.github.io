@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Distraction Free YouTube</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    // Function to remove .html extension from the URL
+    function removeHtmlExtension() {
+      var path = window.location.pathname;
+      if (path.endsWith(".html")) {
+        path = path.slice(0, -5);
+        window.history.replaceState(null, null, path);
+      }
+    }
+
+    var player;
+
+    function onPlayerReady(event) {
+      $('#playBtn').click(function () {
+        var videoUrl = $('#videoUrl').val();
+        playYouTubeVideo(videoUrl);
+      });
+    }
+
+    function playYouTubeVideo(url) {
+      var videoId = getYouTubeID(url);
+      var embedUrl = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+      $('#player').attr('src', embedUrl);
+    }
+
+    function getYouTubeID(url) {
+      var videoId = url.split('v=')[1];
+      var ampersandPosition = videoId.indexOf('&');
+      if (ampersandPosition !== -1) {
+        videoId = videoId.substring(0, ampersandPosition);
+      }
+      return videoId;
+    }
+
+    $(document).ready(function () {
+      // Call the function to remove .html extension
+      removeHtmlExtension();
+
+      $("#searchBtn").click(function () {
+        var search_query = $("#searchQuery").val();
+        var api_key = "AIzaSyBv3YrE9iswY-mvKIMXyYXfiGnY5RPak_Q"; // Your YouTube API key
+        var youtube_url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=" + search_query + "&key=" + api_key + "&maxResults=1";
+
+        $.get(youtube_url, function (data) {
+          var video_list = data.items;
+          if (video_list.length > 0) {
+            var video = video_list[0];
+            var video_title = video.snippet.title;
+            var video_id = video.id.videoId;
+            var video_thumbnail = video.snippet.thumbnails.medium.url;
+            var video_url = "https://www.youtube.com/watch?v=" + video_id;
+
+            var result_html = "<div><img src='" + video_thumbnail + "'><br><p>" + video_title + "</p><button id='playVideo' data-url='" + video_url + "'>Play Video</button></div>";
+
+            $("#searchResults").html(result_html);
+
+            $('#playVideo').click(function () {
+              var video_url = $(this).data('url');
+              $('#videoUrl').val(video_url);
+              playYouTubeVideo(video_url);
+            });
+          } else {
+            $("#searchResults").html("<p>No videos found.</p>");
+          }
+        });
+      });
+    });
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    #searchQuery {
+      width: 70%;
+      padding: 5px;
+    }
+
+    #searchBtn {
+      padding: 5px;
+    }
+
+    #searchResults {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    #searchResults div {
+      margin: 10px;
+      text-align: center;
+    }
+
+    #playerContainer {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #player {
+      width: 640px;
+      height: 360px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Search YouTube Videos</h1>
+  <label for="searchQuery">Search Query:</label>
+  <input type="text" id="searchQuery">
+  <button id="searchBtn">Search</button>
+  <div id="searchResults"></div>
+  <div id="playerContainer">
+    <iframe id="player" frameborder="0" allowfullscreen></iframe>
+    <input type="hidden" id="videoUrl" value="">
+    <button id="playBtn">Play Video</button>
+  </div>
+</body>
+
+    </html>
+    
