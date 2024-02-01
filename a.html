@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Video Search</title>
+    <style>
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .video-thumbnail {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,7 +27,7 @@
         <button type="button" onclick="searchVideos()">Search</button>
     </form>
 
-    <div id="results"></div>
+    <div id="results" class="video-grid"></div>
 
     <script>
         function searchVideos() {
@@ -38,16 +50,29 @@
             items.forEach(item => {
                 var videoId = item.id.videoId;
                 var thumbnailUrl = item.snippet.thumbnails.default.url;
+                var channelTitle = item.snippet.channelTitle;
 
                 var videoElement = document.createElement('div');
                 videoElement.innerHTML = `
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                    <div class="video-thumbnail" onclick="playVideo('${videoId}')">
+                        <img src="${thumbnailUrl}" alt="Video Thumbnail">
+                    </div>
+                    <p>${channelTitle}</p>
                 `;
 
                 resultsContainer.appendChild(videoElement);
             });
         }
+
+        function playVideo(videoId) {
+            var playerContainer = document.getElementById('playerContainer');
+            playerContainer.innerHTML = `
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+            `;
+        }
     </script>
+
+    <div id="playerContainer"></div>
 
 </body>
 </html>
