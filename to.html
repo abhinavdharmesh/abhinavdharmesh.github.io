@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>YouTube Search</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+		}
+		.container {
+			margin: 0 auto;
+			width: 80%;
+			padding: 20px;
+			background-color: #fff;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+		}
+		h1 {
+			text-align: center;
+			margin-top: 0;
+		}
+		form {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+		input[type="text"] {
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			width: 70%;
+			margin-right: 10px;
+			font-size: 16px;
+		}
+		input[type="submit"] {
+			padding: 10px 20px;
+			background-color: #f44336;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+		.row {
+			display: flex;
+			flex-wrap: wrap;
+			margin: 0 -10px;
+		}
+		.col {
+			flex: 1;
+			padding: 10px;
+			box-sizing: border-box;
+		}
+		.col video {
+			width: 100%;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>YouTube Search</h1>
+		<form id="search-form">
+			<input type="text" id="search-input" placeholder="Search...">
+			<input type="submit" value="Search">
+		</form>
+		<div class="row" id="search-results"></div>
+	</div>
+	<script>
+		const form = document.getElementById('search-form');
+		const input = document.getElementById('search-input');
+		const results = document.getElementById('search-results');
+
+		form.addEventListener('submit', e => {
+			e.preventDefault();
+			const query = input.value.trim();
+			if (query.length) {
+				search(query);
+			}
+		});
+
+		function search(query) {
+			const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=9&q=${query}&key=AIzaSyBv3YrE9iswY-mvKIMXyYXfiGnY5RPak_Q`;
+			fetch(url)
+				.then(response => response.json())
+				.then(data => {
+					let output = '';
+					data.items.forEach(item => {
+						const videoId = item.id.videoId;
+						const thumbnail = item.snippet.thumbnails.medium.url;
+						output += `
+							<div class="col">
+								<video src="https://www.youtube.com/embed/${videoId}" poster="${thumbnail}" onclick="playVideo(this)">
+								</video>
+							</div>
+						`;
+					});
+					results.innerHTML = output;
+				})
+				.catch(error => console.error(error));
+		}
+
+		function playVideo(video) {
+			video.controls = true;
+			video.play();
+		}
+	</script>
+</body>
+</html>
