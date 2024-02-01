@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Search</title>
+</head>
+<body>
+
+    <h1>YouTube Video Search</h1>
+
+    <form id="searchForm">
+        <label for="searchInput">Search videos:</label>
+        <input type="text" id="searchInput" placeholder="Enter search query">
+        <button type="button" onclick="searchVideos()">Search</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        function searchVideos() {
+            var query = document.getElementById('searchInput').value;
+            var apiKey = 'AIzaSyBv3YrE9iswY-mvKIMXyYXfiGnY5RPak_Q';
+            var maxResults = 10;
+
+            var apiUrl = `https://www.googleapis.com/youtube/v3/search?q=${query}&maxResults=${maxResults}&part=snippet&key=${apiKey}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => displayResults(data.items))
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function displayResults(items) {
+            var resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            items.forEach(item => {
+                var videoId = item.id.videoId;
+                var thumbnailUrl = item.snippet.thumbnails.default.url;
+
+                var videoElement = document.createElement('div');
+                videoElement.innerHTML = `
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                `;
+
+                resultsContainer.appendChild(videoElement);
+            });
+        }
+    </script>
+
+</body>
+</html>
