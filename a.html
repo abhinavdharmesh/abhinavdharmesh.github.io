@@ -1,88 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Search</title>
-    <style>
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .video-thumbnail {
-            cursor: pointer;
-        }
-
-        #playerContainer {
-            margin-top: 20px;
-        }
-
-        video {
-            width: 100%;
-        }
-    </style>
+	<title>YouTube Search</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+		}
+		.container {
+			margin: 0 auto;
+			width: 80%;
+			padding: 20px;
+			background-color: #fff;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+		}
+		h1 {
+			text-align: center;
+			margin-top: 0;
+		}
+		form {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+		input[type="text"] {
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			width: 70%;
+			margin-right: 10px;
+			font-size: 16px;
+		}
+		input[type="submit"] {
+			padding: 10px 20px;
+			background-color: #f44336;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+		.row {
+			display: flex;
+			flex-wrap: wrap;
+			margin: 0 -10px;
+		}
+		.col {
+			flex: 1;
+			padding: 10px;
+			box-sizing: border-box;
+		}
+		.col img {
+			width: 100%;
+			cursor: pointer;
+		}
+	</style>
 </head>
 <body>
+	<div class="container">
+		<h1>YouTube Search</h1>
+		<form id="search-form">
+			<input type="text" id="search-input" placeholder="Search...">
+			<input type="submit" value="Search">
+		</form>
+		<div class="row" id="search-results"></div>
+	</div>
+	<script>
+		const form = document.getElementById('search-form');
+		const input = document.getElementById('search-input');
+		const results = document.getElementById('search-results');
 
-    <h1>YouTube Video Search</h1>
+		form.addEventListener('submit', e => {
+			e.preventDefault();
+			const query = input.value.trim();
+			if (query.length) {
+				search(query);
+			}
+		});
 
-    <form id="searchForm">
-        <label for="searchInput">Search videos:</label>
-        <input type="text" id="searchInput" placeholder="Enter search query">
-        <button type="button" onclick="searchVideos()">Search</button>
-    </form>
+		function search(query) {
+			const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=9&q=${query}&key=AIzaSyBv3YrE9iswY-mvKIMXyYXfiGnY5RPak_Q`;
+			fetch(url)
+				.then(response => response.json())
+				.then(data => {
+					let output = '';
+					data.items.forEach(item => {
+						const videoId = item.id.videoId;
+						const thumbnail = item.snippet.thumbnails.medium.url;
+						output += `
+							<div class="col">
+								<img src="${thumbnail}" alt="${item.snippet.title}" onclick="playVideo('${videoId}')">
+							</div>
+						`;
+					});
+					results.innerHTML = output;
+				})
+				.catch(error => console.error(error));
+		}
 
-    <div id="results" class="video-grid"></div>
-
-    <div id="playerContainer"></div>
-
-    <script>
-        function searchVideos() {
-            var query = document.getElementById('searchInput').value;
-            var apiKey = 'AIzaSyBv3YrE9iswY-mvKIMXyYXfiGnY5RPak_Q';
-            var maxResults = 10;
-
-            var apiUrl = `https://www.googleapis.com/youtube/v3/search?q=${query}&maxResults=${maxResults}&part=snippet&key=${apiKey}`;
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => displayResults(data.items))
-                .catch(error => console.error('Error fetching data:', error));
-        }
-
-        function displayResults(items) {
-            var resultsContainer = document.getElementById('results');
-            resultsContainer.innerHTML = '';
-
-            items.forEach(item => {
-                var videoId = item.id.videoId;
-                var thumbnailUrl = item.snippet.thumbnails.medium.url;
-
-                var videoElement = document.createElement('div');
-                videoElement.innerHTML = `
-                    <div class="video-thumbnail" onclick="playVideo('${videoId}', '${item.snippet.title}')">
-                        <img src="${thumbnailUrl}" alt="Video Thumbnail" style="width: 100%">
-                    </div>
-                `;
-
-                resultsContainer.appendChild(videoElement);
-            });
-        }
-
-        function playVideo(videoId, videoTitle) {
-            var playerContainer = document.getElementById('playerContainer');
-            playerContainer.innerHTML = `
-                <video controls>
-                    <source src="https://www.youtube.com/watch?v=${videoId}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <h2>${videoTitle}</h2>
-            `;
-        }
-    </script>
-
+		function playVideo(videoId) {
+			const url = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+			const iframe = document.createElement('iframe');
+			iframe.setAttribute('src', url);
+			iframe.setAttribute('width', '560');
+			iframe.setAttribute('height', '315');
+			iframe.setAttribute('frameborder', '0');
+			iframe.setAttribute('allowfullscreen', '');
+			results.innerHTML = '';
+			results.appendChild(iframe);
+		}
+	</script>
 </body>
 </html>
