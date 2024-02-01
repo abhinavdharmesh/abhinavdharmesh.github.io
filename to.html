@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>YouTube Search</title>
-	<link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
 	<style>
 		body {
 			font-family: Arial, sans-serif;
@@ -53,7 +53,7 @@
 			padding: 10px;
 			box-sizing: border-box;
 		}
-		.video-js {
+		.plyr {
 			width: 100%;
 			height: 0;
 			padding-bottom: 56.25%;
@@ -69,7 +69,7 @@
 		</form>
 		<div class="row" id="search-results"></div>
 	</div>
-	<script src="https://vjs.zencdn.net/7.14.3/video.min.js"></script>
+	<script src="https://cdn.plyr.io/3.6.8/plyr.js"></script>
 	<script>
 		const form = document.getElementById('search-form');
 		const input = document.getElementById('search-input');
@@ -94,7 +94,7 @@
 						const thumbnail = item.snippet.thumbnails.medium.url;
 						output += `
 							<div class="col">
-								<video id="video-${videoId}" class="video-js vjs-default-skin" controls preload="auto" poster="${thumbnail}">
+								<video id="video-${videoId}" class="plyr" poster="${thumbnail}">
 									<source src="https://www.youtube.com/embed/${videoId}" type="video/mp4">
 								</video>
 							</div>
@@ -103,15 +103,15 @@
 					results.innerHTML = output;
 					data.items.forEach(item => {
 						const videoId = item.id.videoId;
-						videojs(`video-${videoId}`, {
-							controls: true,
-							autoplay: false,
-							preload: 'auto',
-							techOrder: ['youtube'],
-							sources: [{
-								type: 'video/youtube',
-								src: `https://www.youtube.com/watch?v=${videoId}`
-							}]
+						const player = new Plyr(`#video-${videoId}`, {
+							controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+							youtube: {
+								noCookie: true,
+								rel: 0,
+								showinfo: 0,
+								iv_load_policy: 3,
+								modestbranding: 1
+							}
 						});
 					});
 				})
