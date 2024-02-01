@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>YouTube Search</title>
+	<link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet" />
 	<style>
 		body {
 			font-family: Arial, sans-serif;
@@ -52,9 +53,10 @@
 			padding: 10px;
 			box-sizing: border-box;
 		}
-		.col video {
+		.video-js {
 			width: 100%;
-			cursor: pointer;
+			height: 0;
+			padding-bottom: 56.25%;
 		}
 	</style>
 </head>
@@ -67,6 +69,7 @@
 		</form>
 		<div class="row" id="search-results"></div>
 	</div>
+	<script src="https://vjs.zencdn.net/7.14.3/video.min.js"></script>
 	<script>
 		const form = document.getElementById('search-form');
 		const input = document.getElementById('search-input');
@@ -91,19 +94,28 @@
 						const thumbnail = item.snippet.thumbnails.medium.url;
 						output += `
 							<div class="col">
-								<video src="https://www.youtube.com/embed/${videoId}" poster="${thumbnail}" onclick="playVideo(this)">
+								<video id="video-${videoId}" class="video-js vjs-default-skin" controls preload="auto" poster="${thumbnail}">
+									<source src="https://www.youtube.com/embed/${videoId}" type="video/mp4">
 								</video>
 							</div>
 						`;
 					});
 					results.innerHTML = output;
+					data.items.forEach(item => {
+						const videoId = item.id.videoId;
+						videojs(`video-${videoId}`, {
+							controls: true,
+							autoplay: false,
+							preload: 'auto',
+							techOrder: ['youtube'],
+							sources: [{
+								type: 'video/youtube',
+								src: `https://www.youtube.com/watch?v=${videoId}`
+							}]
+						});
+					});
 				})
 				.catch(error => console.error(error));
-		}
-
-		function playVideo(video) {
-			video.controls = true;
-			video.play();
 		}
 	</script>
 </body>
