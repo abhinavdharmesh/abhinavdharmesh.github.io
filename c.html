@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Programming Reference Guide</title>
+    <style>
+        :root {
+            --background-light: #ffffff;
+            --background-dark: #2e3440;
+            --text-light: #2e3440;
+            --text-dark: #d8dee9;
+            --primary-color-light: #5e81ac;
+            --primary-color-dark: #88c0d0;
+            --secondary-color-light: #eceff4;
+            --secondary-color-dark: #434c5e;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        header {
+            background-color: var(--primary-color-light);
+            color: var(--secondary-color-light);
+            padding: 1em;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .content {
+            padding: 2em;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h2 {
+            color: var(--primary-color-light);
+        }
+
+        pre {
+            background-color: var(--secondary-color-light);
+            padding: 1em;
+            overflow: auto;
+            border-radius: 5px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .theme-switch {
+            display: flex;
+            justify-content: center;
+            margin: 1em 0;
+        }
+
+        .theme-switch button {
+            background-color: var(--primary-color-light);
+            color: var(--secondary-color-light);
+            border: none;
+            padding: 0.5em 1em;
+            cursor: pointer;
+            margin: 0 0.5em;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-switch button:hover {
+            background-color: var(--primary-color-dark);
+        }
+
+        .dark-mode {
+            --background-light: #2e3440;
+            --background-dark: #ffffff;
+            --text-light: #d8dee9;
+            --text-dark: #2e3440;
+            --primary-color-light: #88c0d0;
+            --primary-color-dark: #5e81ac;
+            --secondary-color-light: #434c5e;
+            --secondary-color-dark: #eceff4;
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                padding: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>C Programming Reference Guide</h1>
+    </header>
+    <div class="theme-switch">
+        <button onclick="setLightMode()">Light Mode</button>
+        <button onclick="setDarkMode()">Dark Mode</button>
+    </div>
+    <div class="content">
+        <h2>1. The `#include` Directive</h2>
+        <p>In C programming, the `#include` directive is a preprocessor command that tells the compiler to include the contents of a file in the program before the actual compilation process begins. This is typically used to include header files.</p>
+        <pre><code>#include <header_file></code></pre>
+        <p><strong>Example:</strong></p>
+        <pre><code>#include &lt;stdio.h&gt;</code></pre>
+
+        <h2>2. Header Files</h2>
+        <p>Header files in C have a `.h` extension and contain declarations of functions and macros. When you include a header file, you gain access to these declarations, allowing you to use the associated functions and macros in your program.</p>
+        <p><strong>Common Header Files:</strong></p>
+        <ul>
+            <li><code>stdio.h</code>: Standard Input Output header file.</li>
+            <li><code>stdlib.h</code>: Standard Library header file.</li>
+            <li><code>string.h</code>: String handling functions.</li>
+            <li><code>math.h</code>: Mathematical functions.</li>
+        </ul>
+
+        <h2>3. `#include &lt;stdio.h&gt;`</h2>
+        <p><code>&lt;stdio.h&gt;</code> is a standard library header file that includes definitions for standard input and output functions like `printf` and `scanf`.</p>
+        <p><strong>Common Functions in &lt;stdio.h&gt;:</strong></p>
+        <ul>
+            <li><code>printf()</code>: Prints formatted output to the screen.</li>
+            <li><code>scanf()</code>: Reads formatted input from the keyboard.</li>
+            <li><code>fopen()</code>, <code>fclose()</code>, <code>fread()</code>, <code>fwrite()</code>: File operations.</li>
+            <li><code>getchar()</code>, <code>putchar()</code>: Character input and output.</li>
+        </ul>
+        <p><strong>Example Usage:</strong></p>
+        <pre><code>#include &lt;stdio.h&gt;
+
+int main() {
+    printf("Hello, World!\\n");
+    return 0;
+}</code></pre>
+
+        <h2>4. Angle Brackets &lt; &gt; vs. Double Quotes " "</h2>
+        <p><strong>Angle Brackets &lt; &gt;:</strong></p>
+        <ul>
+            <li>Used for including standard library header files.</li>
+            <li>Tells the preprocessor to look for the header file in the standard system directories.</li>
+        </ul>
+        <p><strong>Double Quotes " ":</strong></p>
+        <ul>
+            <li>Used for including user-defined or local header files.</li>
+            <li>Tells the preprocessor to look for the header file in the same directory as the source file first, and then in the standard system directories if not found.</li>
+        </ul>
+        <p><strong>Example of Standard Library Header File:</strong></p>
+        <pre><code>#include &lt;stdio.h&gt; // Standard library header file</code></pre>
+        <p><strong>Example of User-Defined Header File:</strong></p>
+        <pre><code>#include "my_header.h" // User-defined header file</code></pre>
+
+        <h2>5. Example Program Explained</h2>
+        <p>Here is a simple C program with explanations for each part:</p>
+        <pre><code>#include &lt;stdio.h&gt; // Includes the standard input-output library
+
+int main() { // The main function is the entry point of a C program
+    printf("Hello, World!\\n"); // Calls the printf function from stdio.h to print to the console
+    return 0; // Returns 0 to indicate successful execution
+}</code></pre>
+        <ul>
+            <li><code>#include &lt;stdio.h&gt;</code>: This line tells the preprocessor to include the standard input-output header file (<code>stdio.h</code>).</li>
+            <li><code>int main() { ... }</code>: This is the main function where the program starts execution.</li>
+            <li><code>printf("Hello, World!\\n");</code>: This line calls the <code>printf</code> function (defined in <code>stdio.h</code>) to print "Hello, World!" to the screen.</li>
+            <li><code>return 0;</code>: This line indicates that the program has finished successfully.</li>
+        </ul>
+
+        <h2>Summary</h2>
+        <p>1. <strong>`#include` Directive</strong>: Used to include the contents of a header file.</p>
+        <p>2. <strong>Header Files (`.h` files)</strong>: Contain declarations of functions and macros.</p>
+        <p>3. <strong>`&lt;stdio.h&gt;`</strong>: A standard header file for input-output functions.</p>
+        <p>4. <strong>Angle Brackets `&lt; &gt;`</strong>: Used for standard library headers.</p>
+        <p>5. <strong>Double Quotes `" "`</strong>: Used for user-defined headers.</p>
+    </div>
+
+    <script>
+        function setLightMode() {
+            document.body.classList.remove('dark-mode');
+        }
+
+        function setDarkMode() {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
