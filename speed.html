@@ -17,7 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column; /* Added to stack clock and day vertically */
+            flex-direction: column; /* Stack clock and day vertically */
             height: 100vh;
             width: 100vw;
             margin: 0;
@@ -34,6 +34,12 @@
             text-align: center;
         }
         @media only screen and (max-width: 600px) {
+            .clock {
+                font-size: 4rem; /* Adjust font size for smaller screens */
+            }
+            .day {
+                font-size: 1rem; /* Adjust font size for smaller screens */
+            }
             body {
                 background-image: none;
                 background-color: #cccccc;
@@ -43,6 +49,8 @@
     <script src="no_html.js"></script> <!-- Placeholder for your script -->
 </head>
 <body>
+    <div class="clock" id="clock">00:00:00</div>
+    <div class="day" id="day"></div>
 
     <script>
         function updateTime() {
@@ -63,8 +71,5 @@
         // Initial call to display day immediately
         updateTime();
     </script>
-    <div class="clock" id="clock">00:00:00</div>
-    <div class="day" id="day"></div>
-
 </body>
 </html>
