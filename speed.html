@@ -1,52 +1,70 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speedline Screensaver</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&display=swap" rel="stylesheet">
     <style>
-
-    body {
-
-  background-image: url('svg/speed.svg');
-
-  background-size: cover;
-
-  background-repeat: no-repeat;
-
-  background-position: center;
-  
-  height: 100vh;
-
-  width: 100vw;
-
-  margin: 0;
-
-}
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+            background-image: url('svg/speed.svg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Added to stack clock and day vertically */
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            color: white; /* Set font color to white */
+        }
+        .clock {
+            font-size: 8rem; /* Adjust size as needed */
+            font-weight: 600; /* SemiBold */
+            text-align: center;
+            margin-bottom: 20px; /* Spacing between clock and day */
+        }
+        .day {
+            font-size: 1.5rem; /* Adjust size as needed */
+            text-align: center;
+        }
         @media only screen and (max-width: 600px) {
-
-  body {
-
-    background-image: none;
-
-    background-color: #cccccc;
-
-  }
-
-}
-
-</style>
-
-<script src="no_html.js"></script>
-
+            body {
+                background-image: none;
+                background-color: #cccccc;
+            }
+        }
+    </style>
+    <script src="no_html.js"></script> <!-- Placeholder for your script -->
 </head>
-
 <body>
 
-</body>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
 
+            // Get current day as text (e.g., Monday, Tuesday)
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            let dayOfWeek = days[now.getDay()];
+            document.getElementById('day').textContent = dayOfWeek;
+        }
+        // Update time every second
+        setInterval(updateTime, 1000);
+
+        // Initial call to display day immediately
+        updateTime();
+    </script>
+    <div class="clock" id="clock">00:00:00</div>
+    <div class="day" id="day"></div>
+
+</body>
 </html>
