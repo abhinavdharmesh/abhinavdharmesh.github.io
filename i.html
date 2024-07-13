@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ok</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'PT Serif', serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-image: url('svg/speed.svg'); /* Replace with your animated background SVG */
+            background-size: cover;
+            background-position: center;
+            color: #fff; /* Set text color to white */
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background for content */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+            .container {
+                -webkit-backdrop-filter: blur(10px); /* Apply the blur effect */
+                backdrop-filter: blur(10px);
+                background: rgba(0, 0, 0, 0.3); /* Adjust opacity for the blurred effect */
+            }
+        }
+        h1, h2, p, li {
+            color: #fff; /* Set all text inside container to white */
+        }
+        h1 {
+            color: #007bff; /* Adjust specific color for h1 if needed */
+            text-align: center;
+        }
+        h2 {
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        ul li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        ul li i {
+            margin-right: 10px;
+            color: #007bff; /* Adjust icon color if needed */
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .icon {
+            color: #007bff;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>About Me</h1>
+        </header>
+        <section>
+            <h2>Hey, I'm Abhinav Dharmesh!</h2>
+            <p>I'm passionate about computer science. I love blending creativity with code, tackling challenges, and creating digital solutions. Python's my tool of choice—for automation, data crunching, and software development.</p>
+        </section>
+        <section>
+            <h2>Things I'm into:</h2>
+            <ul>
+                <li><i class="fa-solid fa-python icon"></i>Python: Automation, scripting, and data crunching.</li>
+                <li><i class="fa-solid fa-code icon"></i>Web Development: Crafting stylish websites with HTML/CSS.</li>
+                <li><i class="fa-solid fa-paint-brush icon"></i>Graphics Design: Adobe Illustrator for cool digital art and vector graphics.</li>
+                <li><i class="fa-solid fa-database icon"></i>Database Management: SQL and MySQL to handle and manipulate data.</li>
+                <li><i class="fa-solid fa-terminal icon"></i>Linux Enthusiast: Bash scripting and system maintenance.</li>
+            </ul>
+        </section>
+    </div>
+</body>
+  </html>
+  
