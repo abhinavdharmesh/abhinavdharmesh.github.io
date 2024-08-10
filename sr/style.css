@@ -1,0 +1,51 @@
+body {
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text-display {
+    font-size: 24px;
+    min-height: 150px;
+    max-height: 300px;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    resize: both; /* Make the text display box resizable */
+    overflow: auto; /* Ensure scrollbars appear if content overflows */
+}
+
+.dark-mode {
+    background-color: #0d1117;
+    color: #c9d1d9;
+}
+
+.dark-mode .text-display {
+    background-color: #161b22;
+    border-color: #30363d;
+}
+
+.dark-mode textarea {
+    background-color: #161b22;
+    color: #c9d1d9;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .text-display {
+        max-width: 600px; /* Allowing more width on larger screens */
+    }
+}
+
+@media (max-width: 767px) {
+    .text-display {
+        width: 100%;
+    }
+}
