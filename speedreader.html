@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Reader</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 flex items-center justify-center min-h-screen">
+    <div class="container p-6 max-w-full md:max-w-xl flex flex-col items-center">
+        
+        <!-- Resizable and Centered Text Display -->
+        <div id="textDisplay" class="text-display bg-white dark:bg-gray-800 p-6 rounded-md shadow-md text-2xl resize overflow-auto border border-gray-200 dark:border-gray-600 mb-4">
+            <span class="text-center">Your text will appear here...</span>
+        </div>
+
+        <textarea id="textInput" placeholder="Paste your text here..." class="w-full p-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4"></textarea>
+        
+        <div class="flex items-center justify-between mb-4 w-full">
+            <button id="playPauseBtn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300">
+                <i class="fas fa-play"></i>
+            </button>
+        </div>
+        
+        <div class="relative mb-4 w-full">
+            <input type="range" id="seekBar" min="0" max="100" value="0" class="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer">
+            <label id="currentWord" class="absolute left-1/2 transform -translate-x-1/2 top-1 text-sm text-gray-600">0 / 0</label>
+        </div>
+        
+        <div class="flex items-center justify-between mb-4 w-full">
+            <label for="speedControl" class="text-sm">Speed (ms/word)</label>
+            <input type="range" id="speedControl" min="50" max="500" value="200" class="w-full ml-4 h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer">
+        </div>
+
+        <!-- Text Size Control -->
+        <div class="flex items-center justify-between mb-4 w-full">
+            <label for="fontSizeControl" class="text-sm">Text Size:</label>
+            <input type="range" id="fontSizeControl" min="16" max="94" value="24" class="w-full ml-4 h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer">
+        </div>
+
+        <div class="flex items-center justify-between mb-4 w-full">
+            <label for="darkModeSwitch" class="text-sm">Dark Mode:</label>
+            <input type="checkbox" id="darkModeSwitch" class="ml-2 rounded-full">
+        </div>
+        
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
