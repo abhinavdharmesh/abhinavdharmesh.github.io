@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propositional Logic Selector</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        select {
+            height: 200px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .selected-options {
+            margin-top: 30px;
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+        }
+
+        .selected-options h2 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .user-selection {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #e1f5fe;
+            border-left: 5px solid #3498db;
+            border-radius: 5px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            select {
+                height: 150px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Select Your Topics</h1>
+
+        <div>
+            <label for="options">Choose topics:</label>
+            <select id="options" multiple>
+                <!-- Options list remains the same -->
+                <option value="Propositions">Propositions</option>
+                <option value="Connectives">Connectives</option>
+                <!-- Rest of the options... -->
+            </select>
+        </div>
+
+        <div>
+            <label for="name">Enter your name:</label>
+            <input type="text" id="name" placeholder="Your Name">
+        </div>
+
+        <button id="saveBtn">Save</button>
+
+        <div class="selected-options" id="displaySelected">
+            <h2>Your Selections</h2>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2024 Propositional Logic Selector. All rights reserved.
+    </div>
+
+    <script>
+        const optionsSelect = document.getElementById('options');
+        const nameInput = document.getElementById('name');
+        const saveBtn = document.getElementById('saveBtn');
+        const displaySelected = document.getElementById('displaySelected');
+
+        saveBtn.addEventListener('click', () => {
+            const selectedOptions = Array.from(optionsSelect.selectedOptions).map(option => option.value);
+            const name = nameInput.value.trim();
+
+            if (selectedOptions.length > 0 && name) {
+                // Create a new div to display the selections
+                const userSelection = document.createElement('div');
+                userSelection.classList.add('user-selection');
+                userSelection.textContent = `${name} selected: ${selectedOptions.join(', ')}`;
+                displaySelected.appendChild(userSelection);
+
+                // Remove selected options from the dropdown
+                selectedOptions.forEach(option => {
+                    const optionToRemove = [...optionsSelect.options].find(o => o.value === option);
+                    if (optionToRemove) {
+                        optionToRemove.remove();
+                    }
+                });
+
+                // Clear the name input
+                nameInput.value = '';
+            } else {
+                alert('Please select at least one option and enter your name.');
+            }
+        });
+    </script>
+
+</body>
+</html>
