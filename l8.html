@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propositional Logic Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .selected-options {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Select Your Topics</h1>
+
+<div>
+    <label for="options">Choose topics:</label><br>
+    <select id="options" multiple>
+        <option value="Propositions">Propositions</option>
+        <option value="Connectives">Connectives</option>
+        <option value="Propositional formulae">Propositional formulae</option>
+        <option value="Truth tables">Truth tables</option>
+        <option value="Equivalence of formulas">Equivalence of formulas</option>
+        <option value="Tautological implications">Tautological implications</option>
+        <option value="Normal forms: Disjunctive and Conjunctive">Normal forms: Disjunctive and Conjunctive</option>
+        <option value="Theory of inference for propositional calculus">Theory of inference for propositional calculus</option>
+        <option value="Predicate calculus: Predicates, variables, and quantifiers">Predicate calculus: Predicates, variables, and quantifiers</option>
+        <option value="Free and bound variables">Free and bound variables</option>
+        <option value="Universe of discourse">Universe of discourse</option>
+        <option value="Nested quantifiers">Nested quantifiers</option>
+        <option value="Rules of inference for predicate calculus">Rules of inference for predicate calculus</option>
+        <option value="Proof methods">Proof methods</option>
+        <option value="Russell's Paradox">Russell's Paradox</option>
+        <option value="Arbitrary Union">Arbitrary Union</option>
+        <option value="Arbitrary Intersection">Arbitrary Intersection</option>
+        <option value="Equivalence relation">Equivalence relation</option>
+        <option value="Partition of a set">Partition of a set</option>
+        <option value="Composition and inverse of a function">Composition and inverse of a function</option>
+        <option value="Finite sets">Finite sets</option>
+        <option value="Countable and uncountable sets">Countable and uncountable sets</option>
+        <option value="Axiom of choice">Axiom of choice</option>
+        <option value="Partially ordered set">Partially ordered set</option>
+        <option value="Ordered set">Ordered set</option>
+        <option value="Dictionary order relation">Dictionary order relation</option>
+        <option value="Upper bound / Lower bound">Upper bound / Lower bound</option>
+        <option value="Maximal / Minimal element">Maximal / Minimal element</option>
+        <option value="Supremum">Supremum</option>
+        <option value="Infimum">Infimum</option>
+        <option value="Lattice">Lattice</option>
+        <option value="Zorn's Lemma">Zorn's Lemma</option>
+        <option value="Well-ordering principle">Well-ordering principle</option>
+        <option value="Principles of Mathematical Induction">Principles of Mathematical Induction</option>
+        <option value="Division Algorithm">Division Algorithm</option>
+        <option value="Prime Numbers">Prime Numbers</option>
+        <option value="Euclid's Lemma">Euclid's Lemma</option>
+        <option value="Greatest Common Divisor (GCD)">Greatest Common Divisor (GCD)</option>
+        <option value="Euclidean Algorithm">Euclidean Algorithm</option>
+        <option value="Fundamental Theorem of Arithmetic">Fundamental Theorem of Arithmetic</option>
+        <option value="Congruence">Congruence</option>
+        <option value="Properties of Congruence">Properties of Congruence</option>
+        <option value="Integers Modulo n">Integers Modulo n</option>
+        <option value="Combinatorics">Combinatorics</option>
+        <option value="Fundamental laws of counting">Fundamental laws of counting</option>
+        <option value="Pigeonhole principle">Pigeonhole principle</option>
+        <option value="Permutations">Permutations</option>
+        <option value="Combinations">Combinations</option>
+        <option value="Binomial theorem">Binomial theorem</option>
+        <option value="Multinomial theorem">Multinomial theorem</option>
+        <option value="Principle of exclusion and inclusion">Principle of exclusion and inclusion</option>
+        <option value="Arrangements">Arrangements</option>
+        <option value="Permutations with forbidden positions">Permutations with forbidden positions</option>
+        <option value="Discrete numeric functions">Discrete numeric functions</option>
+        <option value="Generating functions">Generating functions</option>
+        <option value="Recurrence relations">Recurrence relations</option>
+    </select>
+</div>
+
+<div>
+    <label for="name">Enter your name:</label>
+    <input type="text" id="name" placeholder="Your Name">
+</div>
+
+<button id="saveBtn">Save</button>
+
+<div class="selected-options" id="displaySelected">
+    <h2>Your Selections</h2>
+</div>
+
+<script>
+    const optionsSelect = document.getElementById('options');
+    const nameInput = document.getElementById('name');
+    const saveBtn = document.getElementById('saveBtn');
+    const displaySelected = document.getElementById('displaySelected');
+
+    saveBtn.addEventListener('click', () => {
+        const selectedOptions = Array.from(optionsSelect.selectedOptions).map(option => option.value);
+        const name = nameInput.value.trim();
+
+        if (selectedOptions.length > 0 && name) {
+            // Create a new div to display the selections
+            const userSelection = document.createElement('div');
+            userSelection.textContent = `${name} selected: ${selectedOptions.join(', ')}`;
+            displaySelected.appendChild(userSelection);
+
+            // Remove selected options from the dropdown
+            selectedOptions.forEach(option => {
+                const optionToRemove = [...optionsSelect.options].find(o => o.value === option);
+                if (optionToRemove) {
+                    optionToRemove.remove();
+                }
+            });
+
+            // Clear the name input
+            nameInput.value = '';
+        } else {
+            alert('Please select at least one option and enter your name.');
+        }
+    });
+</script>
+
+</body>
+  </html>
