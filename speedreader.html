@@ -10,24 +10,52 @@
         :root {
             --primary-color: #6366f1;
             --primary-hover: #4f46e5;
+            --bg-color: #ffffff;
+            --text-color: #1f2937;
+            --secondary-bg: #f3f4f6;
+            --border-color: #e5e7eb;
         }
         
         body.dark {
             --primary-color: #8183ff;
             --primary-hover: #6366f1;
+            --bg-color: #1f2937;
+            --text-color: #f3f4f6;
+            --secondary-bg: #374151;
+            --border-color: #4b5563;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
         }
         
         .text-display {
             min-height: 200px;
             max-height: 400px;
             transition: all 0.3s ease;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
         
         .current-word {
+            display: inline-block;
             background-color: var(--primary-color);
             color: white;
-            padding: 0 4px;
+            padding: 2px 8px;
             border-radius: 4px;
+            margin: 0 4px;
+        }
+        
+        .context-word {
+            display: inline-block;
+            opacity: 0.6;
+            margin: 0 4px;
         }
         
         /* Custom slider styling */
@@ -35,7 +63,7 @@
             -webkit-appearance: none;
             height: 8px;
             border-radius: 8px;
-            background: #e5e7eb;
+            background: var(--secondary-bg);
         }
         
         input[type="range"]::-webkit-slider-thumb {
@@ -107,72 +135,98 @@
             height: 40px;
             border-radius: 50%;
             transition: all 0.3s ease;
+            background-color: var(--primary-color);
+            color: white;
         }
         
         .btn-icon:hover {
             transform: scale(1.1);
+            background-color: var(--primary-hover);
         }
         
-        .tooltip {
-            position: relative;
+        .btn-secondary {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
         }
         
-        .tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-        
-        .tooltip-text {
-            visibility: hidden;
-            opacity: 0;
-            width: 120px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-            transition: opacity 0.3s;
+        .btn-secondary:hover {
+            background-color: var(--border-color);
         }
         
         .settings-panel {
             overflow: hidden;
             transition: max-height 0.5s ease-in-out;
+            background-color: var(--bg-color);
+            border-color: var(--border-color);
+        }
+        
+        .settings-card {
+            background-color: var(--bg-color);
+            border-color: var(--border-color);
+        }
+        
+        textarea, select, button {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border-color: var(--border-color);
+        }
+        
+        .speed-preset {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .speed-preset:hover {
+            background-color: var(--border-color);
+        }
+        
+        .speed-preset.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Fixed container for the highlighted word */
+        .highlight-container {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            overflow: hidden;
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-900 transition-colors duration-300 flex items-center justify-center min-h-screen">
-    <div class="container p-6 max-w-full md:max-w-xl flex flex-col items-center">
+<body>
+    <div class="container p-6 max-w-full md:max-w-xl mx-auto">
         <!-- Header with title and settings button -->
         <div class="flex justify-between items-center w-full mb-4">
             <h1 class="text-2xl font-bold">Speed Reader</h1>
-            <button id="settingsToggle" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-full p-2 transition-colors duration-300">
+            <button id="settingsToggle" class="btn-secondary rounded-full p-2 transition-colors duration-300">
                 <i class="fas fa-cog"></i>
             </button>
         </div>
         
-        <!-- Resizable and Centered Text Display -->
-        <div id="textDisplay" class="text-display bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full border border-gray-200 dark:border-gray-700 mb-4 flex items-center justify-center">
-            <span class="text-center text-gray-500 dark:text-gray-400">Your text will appear here...</span>
+        <!-- Fixed position highlight container -->
+        <div class="highlight-container border rounded-lg shadow-md" id="highlightContainer">
+            <div id="textDisplay" class="text-center px-4">
+                <span class="text-center opacity-60">Your text will appear here...</span>
+            </div>
         </div>
         
         <!-- Progress bar and player controls -->
         <div class="flex items-center space-x-3 mb-4 w-full">
-            <button id="playPauseBtn" class="btn-icon bg-indigo-500 hover:bg-indigo-600 text-white transition-colors duration-300 flex-shrink-0">
+            <button id="playPauseBtn" class="btn-icon flex-shrink-0">
                 <i class="fas fa-play"></i>
             </button>
             
-            <button id="restartBtn" class="btn-icon bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-colors duration-300 flex-shrink-0">
+            <button id="restartBtn" class="btn-icon btn-secondary flex-shrink-0">
                 <i class="fas fa-undo"></i>
             </button>
             
             <div class="relative w-full">
-                <input type="range" id="seekBar" min="0" max="100" value="0" class="w-full dark:bg-gray-700">
-                <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <input type="range" id="seekBar" min="0" max="100" value="0" class="w-full">
+                <div class="flex justify-between text-xs mt-1">
                     <span id="currentPosition">0</span>
                     <span id="totalWords">/ 0</span>
                 </div>
@@ -180,11 +234,11 @@
         </div>
         
         <!-- Text input -->
-        <textarea id="textInput" placeholder="Paste your text here..." class="w-full p-4 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-800 dark:text-gray-100 mb-4 resize-none h-32"></textarea>
+        <textarea id="textInput" placeholder="Paste your text here..." class="w-full p-4 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4 resize-none h-32"></textarea>
         
         <!-- Settings panel - collapsible -->
         <div id="settingsPanel" class="settings-panel max-h-0 w-full">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700 mb-4">
+            <div class="settings-card rounded-lg shadow p-4 border mb-4">
                 <h3 class="font-bold mb-3 text-lg">Settings</h3>
                 
                 <!-- Reading speed -->
@@ -193,7 +247,7 @@
                         <label for="speedControl" class="text-sm mr-2">Speed:</label>
                         <span id="speedValue" class="text-sm font-bold">200 WPM</span>
                     </div>
-                    <input type="range" id="speedControl" min="60" max="1200" step="10" value="200" class="w-full h-2 dark:bg-gray-700">
+                    <input type="range" id="speedControl" min="60" max="600" step="10" value="200" class="w-full h-2">
                 </div>
                 
                 <!-- Text Size Control -->
@@ -202,7 +256,7 @@
                         <label for="fontSizeControl" class="text-sm mr-2">Text Size:</label>
                         <span id="fontSizeValue" class="text-sm font-bold">24px</span>
                     </div>
-                    <input type="range" id="fontSizeControl" min="16" max="72" value="24" class="w-full h-2 dark:bg-gray-700">
+                    <input type="range" id="fontSizeControl" min="16" max="72" value="24" class="w-full h-2">
                 </div>
                 
                 <!-- Theme toggle -->
@@ -218,15 +272,15 @@
         
         <!-- Quick preset buttons -->
         <div class="flex justify-center space-x-2 w-full">
-            <button class="speed-preset px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full transition-colors duration-300" data-speed="100">Slow</button>
-            <button class="speed-preset px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full transition-colors duration-300" data-speed="200">Normal</button>
-            <button class="speed-preset px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full transition-colors duration-300" data-speed="350">Fast</button>
-            <button class="speed-preset px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full transition-colors duration-300" data-speed="500">Pro</button>
+            <button class="speed-preset px-3 py-1 text-sm rounded-full" data-speed="100">Slow</button>
+            <button class="speed-preset px-3 py-1 text-sm rounded-full" data-speed="200">Normal</button>
+            <button class="speed-preset px-3 py-1 text-sm rounded-full" data-speed="350">Fast</button>
         </div>
     </div>
 
     <script>
         // DOM Elements
+        const highlightContainer = document.getElementById('highlightContainer');
         const textDisplay = document.getElementById('textDisplay');
         const textInput = document.getElementById('textInput');
         const playPauseBtn = document.getElementById('playPauseBtn');
@@ -259,6 +313,9 @@
             
             // Update UI
             updateUI();
+            
+            // Set active speed preset
+            updateActiveSpeedPreset();
         }
         
         // Event Listeners
@@ -286,6 +343,7 @@
             // Speed control
             speedControl.addEventListener('input', function() {
                 updateSpeedDisplay();
+                updateActiveSpeedPreset();
                 saveSettings();
                 if (isPlaying) {
                     stopReading();
@@ -314,6 +372,7 @@
                     const speed = parseInt(this.getAttribute('data-speed'));
                     speedControl.value = speed;
                     updateSpeedDisplay();
+                    updateActiveSpeedPreset();
                     saveSettings();
                     if (isPlaying) {
                         stopReading();
@@ -382,26 +441,20 @@
             updateUI();
         }
         
-        // Display current word
+        // Display current word - FIXED positioning
         function displayCurrentWord() {
-            if (words.length === 0) return;
-            
-            let displayText = '';
-            
-            // Create context (show a few words before and after)
-            const contextSize = 2;
-            const start = Math.max(0, currentWordIndex - contextSize);
-            const end = Math.min(words.length, currentWordIndex + contextSize + 1);
-            
-            for (let i = start; i < end; i++) {
-                if (i === currentWordIndex) {
-                    displayText += `<span class="current-word">${words[i]}</span> `;
-                } else {
-                    displayText += `<span class="text-gray-400">${words[i]}</span> `;
-                }
+            if (words.length === 0) {
+                textDisplay.innerHTML = '<span class="opacity-60">Your text will appear here...</span>';
+                return;
             }
             
-            textDisplay.innerHTML = displayText;
+            if (currentWordIndex >= words.length) {
+                textDisplay.innerHTML = '<span class="opacity-60">Reading complete</span>';
+                return;
+            }
+            
+            // Just display the current word with fixed positioning
+            textDisplay.innerHTML = `<span class="current-word">${words[currentWordIndex]}</span>`;
         }
         
         // Update seek bar
@@ -426,37 +479,12 @@
             fontSizeValue.textContent = `${fontSize}px`;
         }
         
-        // Toggle dark mode
+        // Toggle dark mode - FIXED
         function toggleDarkMode() {
-            document.body.classList.toggle('dark');
             if (darkModeSwitch.checked) {
-                document.body.classList.add('dark:bg-gray-900', 'dark:text-gray-100');
-                document.querySelectorAll('.dark\\:bg-gray-800').forEach(el => {
-                    el.classList.add('bg-gray-800', 'text-gray-100');
-                });
-                document.querySelectorAll('.dark\\:bg-gray-700').forEach(el => {
-                    el.classList.add('bg-gray-700');
-                });
-                document.querySelectorAll('.dark\\:text-gray-400').forEach(el => {
-                    el.classList.add('text-gray-400');
-                });
-                document.querySelectorAll('.dark\\:border-gray-700').forEach(el => {
-                    el.classList.add('border-gray-700');
-                });
+                document.body.classList.add('dark');
             } else {
-                document.body.classList.remove('dark:bg-gray-900', 'dark:text-gray-100');
-                document.querySelectorAll('.dark\\:bg-gray-800').forEach(el => {
-                    el.classList.remove('bg-gray-800', 'text-gray-100');
-                });
-                document.querySelectorAll('.dark\\:bg-gray-700').forEach(el => {
-                    el.classList.remove('bg-gray-700');
-                });
-                document.querySelectorAll('.dark\\:text-gray-400').forEach(el => {
-                    el.classList.remove('text-gray-400');
-                });
-                document.querySelectorAll('.dark\\:border-gray-700').forEach(el => {
-                    el.classList.remove('border-gray-700');
-                });
+                document.body.classList.remove('dark');
             }
         }
         
@@ -469,6 +497,20 @@
                 settingsPanel.classList.remove('max-h-96');
                 settingsPanel.classList.add('max-h-0');
             }
+        }
+        
+        // Update active speed preset
+        function updateActiveSpeedPreset() {
+            const currentSpeed = parseInt(speedControl.value);
+            
+            speedPresets.forEach(button => {
+                const presetSpeed = parseInt(button.getAttribute('data-speed'));
+                if (presetSpeed === currentSpeed) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
         }
         
         // Update UI
@@ -509,4 +551,4 @@
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-</html>
+    </html>
