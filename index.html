@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Directory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #000;
+            margin: 20px;
+        }
+        a {
+            display: block;
+            color: #0000EE;
+            text-decoration: none;
+            margin: 5px 0;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>/index of abhinavdharmesh.github.io</h2>
+    <script>
+        const files = [
+            "4d.html", "a.html", "c.html", "dfy.html", "gd.html", "htt.html", "i.html", "iot.html",
+            "l8.html", "l9.html", "links.html", "ok.html", "old_index.html", "pdf.html", "radio.html", "soundcloud.html",
+            "speed.html", "speedreader.html", "to.html", "ttg.html", "youtube.html", "yt.html"
+        ];
+        files.forEach(file => {
+            document.write(`<a href="${file}">${file.replace('.html', '')}</a>`);
+        });
+    </script>
+</body>
+</html>
