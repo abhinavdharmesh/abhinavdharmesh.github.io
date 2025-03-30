@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ubuntu Performance Optimization</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; }
+        h1 { color: #333; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        code { background: #eee; padding: 2px 6px; border-radius: 4px; }
+        pre { background: #222; color: #fff; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ubuntu Performance Optimization</h1>
+        
+        <h2>1️⃣ Install Preload (Speeds Up App Launches)</h2>
+        <p>Preload helps apps start faster by predicting what you'll open.</p>
+        <pre>sudo apt install preload -y</pre>
+
+        <h2>2️⃣ Reduce Boot Time (Disable Network Delay Service)</h2>
+        <p>Ubuntu has a network delay service that slows booting. Disabling it helps.</p>
+        <pre>sudo systemctl disable NetworkManager-wait-online.service</pre>
+        <p>Then restart:</p>
+        <pre>reboot</pre>
+
+        <h2>3️⃣ Enable ZRAM (Improves RAM Performance)</h2>
+        <p>Since RAM is limited, enabling ZRAM helps reduce swap usage.</p>
+        <pre>sudo apt install zram-tools -y</pre>
+        <p>Then restart:</p>
+        <pre>reboot</pre>
+    </div>
+</body>
+</html>
