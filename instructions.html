@@ -23,13 +23,11 @@
         <h2>2️⃣ Reduce Boot Time (Disable Network Delay Service)</h2>
         <p>Ubuntu has a network delay service that slows booting. Disabling it helps.</p>
         <pre>sudo systemctl disable NetworkManager-wait-online.service</pre>
-        <p>Then restart:</p>
-        <pre>reboot</pre>
-
+        
         <h2>3️⃣ Enable ZRAM (Improves RAM Performance)</h2>
         <p>Since RAM is limited, enabling ZRAM helps reduce swap usage.</p>
         <pre>sudo apt install zram-tools -y</pre>
-        <p>Then restart:</p>
+        <p>Do all 3 things then restart:</p>
         <pre>reboot</pre>
     </div>
 </body>
