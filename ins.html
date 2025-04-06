@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ubuntu Performance Optimization</title>
+</head>
+<body>
+    <h1>Ubuntu Performance Optimization</h1>
+
+    <h2>📊 1️⃣ Check and Note Boot Time</h2>
+    <p>Before making changes, check your current boot time:</p>
+    <pre><code>systemd-analyze</code></pre>
+    <p>For a detailed breakdown, use:</p>
+    <pre><code>systemd-analyze blame</code></pre>
+    <p>Note these times to compare after optimization.</p>
+
+    <h2>🚀 2️⃣ Install Preload (Speeds Up App Launches)</h2>
+    <p>Preload predicts frequently used applications and loads them into memory.</p>
+    <pre><code>sudo apt install preload -y</code></pre>
+
+    <h2>🌐 3️⃣ Disable Network Delay Service (Faster Boot)</h2>
+    <p>Disabling this service can reduce boot delay if your internet takes time to connect.</p>
+    <pre><code>sudo systemctl disable NetworkManager-wait-online.service</code></pre>
+
+    <h2>🧠 4️⃣ Enable ZRAM (Improves RAM Performance)</h2>
+    <p>ZRAM creates compressed swap in RAM, reducing pressure on your disk.</p>
+    <pre><code>sudo apt install zram-tools -y</code></pre>
+
+    <h2>💻 5️⃣ Optional: Remove Snap & Reinstall Firefox (Non-Snap)</h2>
+    <p>Snap packages are slower to load. Removing Snap can help performance.</p>
+    <pre><code>sudo systemctl disable snapd.service snapd.socket snapd.seeded.service
+sudo apt purge snapd -y</code></pre>
+    <p>Then install Firefox via Mozilla's APT PPA:</p>
+    <pre><code>sudo add-apt-repository ppa:mozillateam/ppa
+sudo apt update
+sudo apt install firefox -y</code></pre>
+    <p>Prevent Ubuntu from reverting to Snap:</p>
+    <pre><code>echo '
+Package: *
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+' | sudo tee /etc/apt/preferences.d/mozillateam</code></pre>
+
+    <h2>🎨 6️⃣ Try KDE Plasma (Alternative Desktop Environment)</h2>
+    <pre><code>sudo apt install kde-standard -y</code></pre>
+    <p>At the login screen, click the gear icon ⚙️ to switch to KDE Plasma session.</p>
+    <p>If it lags or feels heavy, you can switch back to GNOME or try XFCE later.</p>
+
+    <h2>🔁 7️⃣ Reboot and Check Boot Time Again</h2>
+    <p>After performing the above steps:</p>
+    <pre><code>reboot</code></pre>
+    <p>Then recheck your boot time:</p>
+    <pre><code>systemd-analyze</code></pre>
+    <p>Compare with your earlier notes to see the improvement.</p>
+</body>
+</html>
