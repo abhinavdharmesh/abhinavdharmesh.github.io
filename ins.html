@@ -53,5 +53,39 @@ Pin-Priority: 1001
     <p>Then recheck your boot time:</p>
     <pre><code>systemd-analyze</code></pre>
     <p>Compare with your earlier notes to see the improvement.</p>
+
+    <h1>Ubuntu Performance Optimization Guide</h1>
+
+    <h2>1️⃣ Install Preload (Speeds Up App Launches)</h2>
+    <p>Preload helps apps start faster by predicting what you'll open.</p>
+    <pre><code>sudo apt install preload -y</code></pre>
+
+    <h2>2️⃣ Reduce Boot Time (Disable Network Delay Service)</h2>
+    <p>Ubuntu has a network delay service that slows booting. Disabling it helps.</p>
+    <pre><code>sudo systemctl disable NetworkManager-wait-online.service</code></pre>
+
+    <h2>3️⃣ Enable ZRAM (Improves RAM Performance)</h2>
+    <p>Since RAM is limited, enabling ZRAM helps reduce swap usage.</p>
+    <pre><code>sudo apt install zram-tools -y</code></pre>
+
+    <h2>🔁 Reboot and Recheck Boot Time</h2>
+    <pre><code>sudo reboot</code></pre>
+    <p>Then after reboot:</p>
+    <pre><code>systemd-analyze</code></pre>
+
+    <h2>✨ KDE Plasma Desktop (Optional)</h2>
+    <p>If you prefer a different and beautiful desktop environment, you can switch to KDE Plasma.</p>
+    <pre><code>sudo apt update && sudo apt install kde-standard -y</code></pre>
+    <p>During installation, select <strong>SDDM</strong> as the default display manager when prompted.</p>
+    <p>Once installation is complete:</p>
+    <pre><code>sudo reboot</code></pre>
+
+    <h3>Post KDE Install Optimizations</h3>
+    <ul>
+        <li>Go to System Settings → Startup and Shutdown → Autostart → Disable unnecessary apps.</li>
+        <li>Set a static wallpaper (instead of slideshow) to reduce load.</li>
+        <li>Disable window and desktop effects under System Settings → Workspace Behavior → Desktop Effects.</li>
+        <li>Use "Breeze" theme and avoid animations if system feels slow.</li>
+    </ul>
 </body>
 </html>
