@@ -4,71 +4,86 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ubuntu Optimization Modes</title>
+  <style>
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      position: relative;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: auto;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      font-size: 12px;
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+  </style>
 </head>
 <body>
   <h1>Ubuntu Optimization for Pentium + 4GB RAM + HDD</h1>
 
   <h2>⚡ 1. Extreme Performance Mode</h2>
-  <pre><code>sudo apt update
+  <pre><code id="code1">sudo apt update
 sudo apt install kde-plasma-desktop -y
 sudo apt install zram-tools -y
 sudo apt install preload -y
-sudo systemctl disable NetworkManager-wait-online.service</code></pre>
+sudo systemctl disable NetworkManager-wait-online.service</code><button class="copy-btn" onclick="copy('code1')">Copy</button></pre>
 
   <p>Set KDE Compositor:</p>
-  <pre><code>Settings > Display and Monitor > Compositor > XRender</code></pre>
+  <pre><code id="code2">Settings > Display and Monitor > Compositor > XRender</code><button class="copy-btn" onclick="copy('code2')">Copy</button></pre>
 
   <p>Disable Effects:</p>
-  <pre><code>Settings > Workspace Behavior > Desktop Effects > Disable All</code></pre>
+  <pre><code id="code3">Settings > Workspace Behavior > Desktop Effects > Disable All</code><button class="copy-btn" onclick="copy('code3')">Copy</button></pre>
 
   <p>Install Lightweight Apps:</p>
-  <pre><code>sudo apt install featherpad mpv thunar qpdfview -y</code></pre>
+  <pre><code id="code4">sudo apt install featherpad mpv thunar qpdfview -y</code><button class="copy-btn" onclick="copy('code4')">Copy</button></pre>
 
   <p>Install Lightweight Browser:</p>
-  <pre><code>sudo apt install falkon -y</code></pre>
+  <pre><code id="code5">sudo apt install falkon -y</code><button class="copy-btn" onclick="copy('code5')">Copy</button></pre>
 
   <p>Remove GNOME:</p>
-  <pre><code>sudo apt purge gnome-shell ubuntu-gnome-desktop
-sudo apt autoremove</code></pre>
+  <pre><code id="code6">sudo apt purge gnome-shell ubuntu-gnome-desktop
+sudo apt autoremove</code><button class="copy-btn" onclick="copy('code6')">Copy</button></pre>
 
   <h2>🎨 2. Balanced Performance + Minimal Beauty Mode</h2>
-  <pre><code>sudo apt update
-sudo apt install kde-plasma-desktop zram-tools preload -y</code></pre>
-
-  <p>Effects:</p>
-  <ul>
-    <li>Disable blur, wobbly windows</li>
-    <li>Keep basic fade/slide transitions</li>
-  </ul>
-
-  <p>Theme:</p>
-  <ul>
-    <li>Use Breeze Dark or Breeze Light</li>
-  </ul>
-
-  <p>Default File Manager:</p>
-  <ul>
-    <li>Dolphin</li>
-  </ul>
+  <pre><code id="code7">sudo apt update
+sudo apt install kde-plasma-desktop zram-tools preload -y</code><button class="copy-btn" onclick="copy('code7')">Copy</button></pre>
 
   <p>Balanced Lightweight Apps:</p>
-  <pre><code>sudo apt install vlc featherpad gwenview okular -y</code></pre>
+  <pre><code id="code8">sudo apt install vlc featherpad gwenview okular -y</code><button class="copy-btn" onclick="copy('code8')">Copy</button></pre>
 
   <p>Replace Snap Firefox:</p>
-  <pre><code>sudo snap remove firefox
-sudo apt install firefox -y</code></pre>
-
-  <p>Optional: Set Compositor to XRender if needed</p>
+  <pre><code id="code9">sudo snap remove firefox
+sudo apt install firefox -y</code><button class="copy-btn" onclick="copy('code9')">Copy</button></pre>
 
   <h2>🧪 After Setup</h2>
   <p>Check Boot Time:</p>
-  <pre><code>systemd-analyze</code></pre>
+  <pre><code id="code10">systemd-analyze</code><button class="copy-btn" onclick="copy('code10')">Copy</button></pre>
 
   <p>Monitor System:</p>
-  <pre><code>htop</code></pre>
+  <pre><code id="code11">htop</code><button class="copy-btn" onclick="copy('code11')">Copy</button></pre>
 
   <p>Clean Up:</p>
-  <pre><code>sudo apt autoremove
-sudo apt clean</code></pre>
+  <pre><code id="code12">sudo apt autoremove
+sudo apt clean</code><button class="copy-btn" onclick="copy('code12')">Copy</button></pre>
+
+  <script>
+    function copy(id) {
+      const codeBlock = document.getElementById(id);
+      const text = codeBlock.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copied!");
+      });
+    }
+  </script>
 </body>
 </html>
