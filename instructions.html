@@ -1,39 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubuntu Performance Optimization</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; }
-        h1 { color: #333; }
-        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        code { background: #eee; padding: 2px 6px; border-radius: 4px; }
-        pre { background: #222; color: #fff; padding: 10px; border-radius: 5px; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Fix Loud Audio in MX Linux</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      color: #222;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    code {
+      background: #eee;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .section {
+      background: white;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    h2 {
+      color: #444;
+      border-left: 4px solid #3399ff;
+      padding-left: 0.5rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Ubuntu Performance Optimization</h1>
-        <p>check system boot time first by using</p>
-        <pre>systemd-analyze</pre>
-        <p>then send that output image on WhatsApp</p>
-        <h2>1️⃣ Install Preload (Speeds Up App Launches)</h2>
-        <p>Preload helps apps start faster by predicting what you'll open.</p>
-        <pre>sudo apt install preload -y</pre>
 
-        <h2>2️⃣ Reduce Boot Time (Disable Network Delay Service)</h2>
-        <p>Ubuntu has a network delay service that slows booting. Disabling it helps.</p>
-        <pre>sudo systemctl disable NetworkManager-wait-online.service</pre>
-        
-        <h2>3️⃣ Enable ZRAM (Improves RAM Performance)</h2>
-        <p>Since RAM is limited, enabling ZRAM helps reduce swap usage.</p>
-        <pre>sudo apt install zram-tools -y</pre>
-        <p>Do all 3 things then restart:</p>
-        <pre>reboot</pre>
-        <p>now check boot time again</p>
-        <pre>systemd-analyze</pre>
-        <p>then send the output again on WhatsApp</p>
-    </div>
+  <h1>🔊 Fix Loud Audio in MX Linux</h1>
+
+  <div class="section">
+    <h2>❓ Why It Happens</h2>
+    <ul>
+      <li>PulseAudio or PipeWire allows volume to exceed 100%</li>
+      <li>Some systems boot with ALSA mixers set too high</li>
+      <li>Dell laptops are especially prone to this behavior</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>✅ Limit Max Volume Using PulseAudio</h2>
+    <p>Open the PulseAudio Volume Control:</p>
+    <pre><code>pavucontrol</code></pre>
+    <ul>
+      <li>Go to <strong>Playback</strong> and <strong>Output Devices</strong></li>
+      <li>Drag volume slider down to 100% max</li>
+      <li>Under <strong>Configuration</strong>, select correct profile like <em>Analog Stereo Output</em></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🎚 Reduce Volume in ALSA Mixer</h2>
+    <p>Launch ALSA Mixer in terminal:</p>
+    <pre><code>alsamixer</code></pre>
+    <ul>
+      <li>Use left/right arrow keys to select channels</li>
+      <li>Use down arrow key to reduce volume</li>
+      <li>Press <code>F6</code> to switch sound cards if needed</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🔍 Check Which Audio Server is Active</h2>
+    <p>PulseAudio:</p>
+    <pre><code>ps -e | grep pulse</code></pre>
+    <p>Or:</p>
+    <pre><code>pactl info</code></pre>
+    <p>PipeWire:</p>
+    <pre><code>ps -e | grep wire</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>📌 Optional: Install Tray Volume Manager</h2>
+    <p>This lets you easily control and cap volume from the system tray:</p>
+    <pre><code>sudo apt install pasystray</code></pre>
+  </div>
+
 </body>
 </html>
