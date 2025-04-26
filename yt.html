@@ -1,143 +1,489 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
-	<title>Distraction Free YouTube</title>	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-	<script>
-
-	    function removeHtmlExtension() {
-
-  var path = window.location.pathname;
-
-  if (path.endsWith(".html")) {
-
-    path = path.slice(0, -5);
-
-    window.history.replaceState(null, null, path);
-
-  }  
-
-}
-
-removeHtmlExtension();
-
-		var player;
-
-		function onYouTubeIframeAPIReady() {
-
-			player = new YT.Player('player', {
-
-				height: '360',
-
-				width: '640',
-
-				events: {
-
-					'onReady': onPlayerReady
-
-				}
-
-			});
-
-		}
-
-		function onPlayerReady(event) {
-
-			$('#playBtn').click(function() {
-
-				player.loadVideoById($('#videoId').val());
-
-			});
-
-			$('#fullScreenBtn').click(function() {
-
-				player.playVideo();
-
-				player.setSize(screen.width, screen.height);
-
-			});
-
-		}		
-
-				$(document).ready(function() {
-
-			$("#searchBtn").click(function() {
-
-				var search_query = $("#searchQuery").val();
-
-				var api_key = "AIzaSyAFNeYg8QqzI9K35UnFe7H7Yy2Mf-tnzFk";
-
-				var youtube_url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=" + search_query + "&key=" + api_key + "&maxResults=10";
-
-				$.get(youtube_url, function(data) {
-
-					var video_list = data.items;
-
-					var result_html = "";
-
-					for (var i = 0; i < video_list.length; i++) {
-
-						var video = video_list[i];
-
-						var video_title = video.snippet.title;
-
-						var video_id = video.id.videoId;
-
-						var video_thumbnail = video.snippet.thumbnails.medium.url;
-
-						var video_url = "https://www.youtube.com/watch?v=" + video_id;
-
-						result_html += "<div><img src='" + video_thumbnail + "'><br><a href='#' class='playVideo' data-id='" + video_id + "'>" + video_title + "</a></div>";
-
-					}
-
-					$("#searchResults").html(result_html);
-
-					$('.playVideo').click(function() {
-
-						var video_id = $(this).data('id');
-
-						$('#videoId').val(video_id);
-
-						player.loadVideoById(video_id);
-
-					});
-
-				});
-
-			});
-
-		});
-
-	</script>
-
-	<script src="https://www.youtube.com/iframe_api"></script>
-
+    <title>Enhanced YouTube Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: black;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+        }
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #f4f4f4;
+        }
+        .container {
+            margin: 0 auto;
+            width: 80%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode .container {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 70%;
+            margin-right: 10px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        body.dark-mode input[type="text"] {
+            background-color: #3d3d3d;
+            color: #fff;
+            border-color: #555;
+        }
+        button, input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover, input[type="submit"]:hover {
+            background-color: #d32f2f;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        .col {
+            flex: 1;
+            min-width: 300px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .col img {
+            width: 100%;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: transform 0.2s;
+        }
+        .col img:hover {
+            transform: scale(1.03);
+        }
+        .video-title {
+            margin-top: 8px;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .player-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            margin-bottom: 20px;
+        }
+        .player-container iframe, .player-container #audio-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .toggle-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .toggle-label {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 24px;
+            transition: .4s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+        input:checked + .toggle-slider {
+            background-color: #2196F3;
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .control-group {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        .control-label {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        #download-options {
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+        #download-options.active {
+            display: block;
+        }
+        #back-button {
+            margin-bottom: 15px;
+            display: none;
+        }
+        .audio-controls {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        body.dark-mode .audio-controls {
+            background-color: #3d3d3d;
+        }
+        #audio-player-container {
+            display: none;
+        }
+        #audio-player-container.active {
+            display: block;
+        }
+        #audio-title {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .download-button {
+            margin: 5px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .download-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="toggle-container">
+        <span class="toggle-label">Dark Mode</span>
+        <label class="toggle">
+            <input type="checkbox" id="dark-mode-toggle">
+            <span class="toggle-slider"></span>
+        </label>
+    </div>
 
-	<h1>Search YouTube Videos</h1>
+    <div class="container">
+        <h1>Enhanced YouTube Search</h1>
+        <form id="search-form">
+            <input type="text" id="search-input" placeholder="Search videos...">
+            <input type="submit" value="Search">
+        </form>
 
-	<label for="searchQuery">Search Query:</label>
+        <div id="back-button">
+            <button onclick="backToSearch()">Back to Search</button>
+        </div>
 
-	<input type="text" id="searchQuery">
+        <div id="player-wrapper" style="display: none;">
+            <div class="player-container">
+                <iframe id="video-player" allowfullscreen></iframe>
+            </div>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <span class="control-label">Audio Only</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="audio-only-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="control-group">
+                    <span class="control-label">Background Play</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="background-play-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <button id="download-button">Download Options</button>
+            </div>
+            
+            <div id="download-options">
+                <h2>Download Options</h2>
+                <button class="download-button" data-quality="audio">Download Audio (mp3)</button>
+                <button class="download-button" data-quality="360p">Download Video (360p)</button>
+                <button class="download-button" data-quality="720p">Download Video (720p)</button>
+            </div>
+            
+            <div id="audio-player-container">
+                <div class="audio-controls">
+                    <div id="audio-title"></div>
+                    <audio id="audio-player" controls></audio>
+                </div>
+            </div>
+        </div>
 
-	<button id="searchBtn">Search</button>
+        <div id="search-results" class="row"></div>
+    </div>
 
-	<div id="searchResults"></div>
+    <script>
+        // DOM Elements
+        const form = document.getElementById('search-form');
+        const input = document.getElementById('search-input');
+        const resultsContainer = document.getElementById('search-results');
+        const playerWrapper = document.getElementById('player-wrapper');
+        const videoPlayer = document.getElementById('video-player');
+        const audioPlayerContainer = document.getElementById('audio-player-container');
+        const audioPlayer = document.getElementById('audio-player');
+        const audioTitle = document.getElementById('audio-title');
+        const backButton = document.getElementById('back-button');
+        const downloadOptions = document.getElementById('download-options');
+        const downloadButton = document.getElementById('download-button');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const audioOnlyToggle = document.getElementById('audio-only-toggle');
+        const backgroundPlayToggle = document.getElementById('background-play-toggle');
 
-	<div id="playerContainer">
+        // API Key - Note: In production, you should secure this
+        const API_KEY = 'AIzaSyBv3YrE9iswY-mvKIMXyYXfiGnY5RPak_Q';
+        
+        // Current video state
+        let currentVideoId = '';
+        let currentVideoTitle = '';
+        let audioSource = '';
+        let backgroundMode = false;
 
-		<div id="player"></div>
+        // Event Listeners
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const query = input.value.trim();
+            if (query.length) {
+                search(query);
+            }
+        });
 
-		<input type="hidden" id="videoId" value="">
+        darkModeToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+        });
 
-	</div>
+        audioOnlyToggle.addEventListener('change', () => {
+            toggleAudioMode(audioOnlyToggle.checked);
+        });
 
+        backgroundPlayToggle.addEventListener('change', () => {
+            backgroundMode = backgroundPlayToggle.checked;
+            updatePlayerVisibility();
+        });
+
+        downloadButton.addEventListener('click', () => {
+            downloadOptions.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.download-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const quality = this.getAttribute('data-quality');
+                downloadMedia(currentVideoId, quality);
+            });
+        });
+
+        // Functions
+        function search(query) {
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=12&q=${query}&type=video&key=${API_KEY}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let output = '';
+                    
+                    data.items.forEach(item => {
+                        const videoId = item.id.videoId;
+                        const thumbnail = item.snippet.thumbnails.high.url;
+                        const title = item.snippet.title;
+                        
+                        output += `
+                            <div class="col">
+                                <img src="${thumbnail}" alt="${title}" onclick="playVideo('${videoId}', '${title.replace(/'/g, "\\'")}')" loading="lazy">
+                                <div class="video-title">${title}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    resultsContainer.innerHTML = output;
+                    playerWrapper.style.display = 'none';
+                    backButton.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    resultsContainer.innerHTML = '<p>An error occurred while searching. Please try again.</p>';
+                });
+        }
+
+        function playVideo(videoId, title) {
+            currentVideoId = videoId;
+            currentVideoTitle = title;
+            
+            // Show player and back button, hide search results
+            playerWrapper.style.display = 'block';
+            backButton.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            
+            // Reset states
+            downloadOptions.classList.remove('active');
+            audioOnlyToggle.checked = false;
+            
+            // Set up video player
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            videoPlayer.setAttribute('src', embedUrl);
+            
+            // Set up audio player
+            audioSource = `https://ytapi.cc/api/?id=${videoId}`;
+            audioPlayer.setAttribute('src', audioSource);
+            audioTitle.textContent = title;
+            
+            // Ensure proper mode is displayed
+            toggleAudioMode(audioOnlyToggle.checked);
+        }
+
+        function toggleAudioMode(audioOnly) {
+            if (audioOnly) {
+                // Switch to audio-only mode
+                videoPlayer.style.display = 'none';
+                audioPlayerContainer.classList.add('active');
+                audioPlayer.play();
+            } else {
+                // Switch to video mode
+                videoPlayer.style.display = 'block';
+                audioPlayerContainer.classList.remove('active');
+                audioPlayer.pause();
+            }
+        }
+
+        function updatePlayerVisibility() {
+            if (backgroundMode) {
+                // When background mode is enabled, we keep audio playing but minimize visibility
+                if (audioOnlyToggle.checked) {
+                    // For audio-only, we can minimize the player section
+                    playerWrapper.style.opacity = '0.3';
+                } else {
+                    // For video, we switch to audio mode automatically
+                    audioOnlyToggle.checked = true;
+                    toggleAudioMode(true);
+                    playerWrapper.style.opacity = '0.3';
+                }
+            } else {
+                // Normal mode - full visibility
+                playerWrapper.style.opacity = '1';
+            }
+        }
+
+        function backToSearch() {
+            playerWrapper.style.display = 'none';
+            backButton.style.display = 'none';
+            resultsContainer.style.display = 'flex';
+            
+            // Stop all media
+            videoPlayer.setAttribute('src', '');
+            audioPlayer.pause();
+            audioPlayer.setAttribute('src', '');
+        }
+
+        function downloadMedia(videoId, quality) {
+            // This is a frontend placeholder for download functionality
+            // In a real implementation, this would connect to a server running youtube-dl
+            
+            let downloadUrl = '';
+            let fileName = '';
+            
+            if (quality === 'audio') {
+                // Simulating audio download
+                downloadUrl = `https://ytapi.cc/api/button/mp3/${videoId}`;
+                fileName = `${currentVideoTitle.slice(0, 30)}.mp3`;
+                alert("Starting audio download. In a full implementation, this would use youtube-dl on a server.");
+            } else {
+                // Simulating video download at specified quality
+                downloadUrl = `https://ytapi.cc/api/button/${quality}/${videoId}`;
+                fileName = `${currentVideoTitle.slice(0, 30)}-${quality}.mp4`;
+                alert(`Starting ${quality} video download. In a full implementation, this would use youtube-dl on a server.`);
+            }
+            
+            // In a production environment, this would initiate an actual download
+            // Here we just log what would happen
+            console.log(`Download initiated: ${fileName} from ${downloadUrl}`);
+            
+            // For demonstration purposes - if you have a real download endpoint:
+            // const downloadLink = document.createElement('a');
+            // downloadLink.href = downloadUrl;
+            // downloadLink.download = fileName;
+            // downloadLink.click();
+        }
+
+        // Initialize dark mode from preferences if available
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            darkModeToggle.checked = true;
+            document.body.classList.add('dark-mode');
+        }
+
+        // Expose functions to global scope for onclick handlers
+        window.playVideo = playVideo;
+        window.backToSearch = backToSearch;
+    </script>
 </body>
-
 </html>
