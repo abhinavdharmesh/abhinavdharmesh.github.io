@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Notes Share</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        body.dark {
+            background: #333;
+            color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        body.light .header {
+            color: #333;
+        }
+
+        body.dark .header {
+            color: #f5f5f5;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .github-config {
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        body.light .github-config {
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        body.dark .github-config {
+            background: #444;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .config-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .config-row input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        body.light .config-row input {
+            border: 2px solid #e1e8ed;
+            background: white;
+            color: #333;
+        }
+
+        body.dark .config-row input {
+            border: 2px solid #555;
+            background: #444;
+            color: #f5f5f5;
+        }
+
+        .config-row input:focus {
+            outline: none;
+            border-color: #ff9800;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .subject-card {
+            padding: 25px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light .subject-card {
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        body.dark .subject-card {
+            background: #444;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #ff9800;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-8px);
+        }
+
+        body.light .subject-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        body.dark .subject-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .subject-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .subject-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        body.light .subject-card h3 {
+            color: #333;
+        }
+
+        body.dark .subject-card h3 {
+            color: #f5f5f5;
+        }
+
+        .notes-list {
+            list-style: none;
+        }
+
+        .note-item {
+            padding: 12px 0;
+            transition: all 0.2s ease;
+        }
+
+        body.light .note-item {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        body.dark .note-item {
+            border-bottom: 1px solid #555;
+        }
+
+        .note-item:hover {
+            padding-left: 10px;
+        }
+
+        body.light .note-item:hover {
+            background: #f8f9fa;
+        }
+
+        body.dark .note-item:hover {
+            background: #555;
+        }
+
+        .note-item:last-child {
+            border-bottom: none;
+        }
+
+        .note-link {
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+
+        body.light .note-link {
+            color: #ff9800;
+        }
+
+        body.dark .note-link {
+            color: #ffcc80;
+        }
+
+        .note-link:hover {
+            text-decoration: underline;
+        }
+
+        body.light .note-link:hover {
+            color: #f57c00;
+        }
+
+        body.dark .note-link:hover {
+            color: #ffb74d;
+        }
+
+        .file-icon {
+            width: 20px;
+            height: 20px;
+            background: #ff6b6b;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.1rem;
+        }
+
+        body.light .loading {
+            color: #666;
+        }
+
+        body.dark .loading {
+            color: #bbb;
+        }
+
+        .error {
+            color: white;
+            background: #ff6b6b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .search-bar {
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        body.light .search-bar {
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        body.dark .search-bar {
+            background: #444;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        body.light .search-bar input {
+            border: 2px solid #e1e8ed;
+            background: white;
+            color: #333;
+        }
+
+        body.dark .search-bar input {
+            border: 2px solid #555;
+            background: #444;
+            color: #f5f5f5;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #ff9800;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        body.light .stat-item {
+            color: #333;
+        }
+
+        body.dark .stat-item {
+            color: #f5f5f5;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .config-row {
+                flex-direction: column;
+            }
+            
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="light">
+    <button class="mode-toggle" onclick="toggleMode()">🌙</button>
+    <div class="container">
+        <div class="header">
+            <h1>📚 GitHub Notes Share</h1>
+            <p>Access study notes directly from GitHub repositories</p>
+        </div>
+
+        <div class="github-config">
+            <h3>🔧 Configure GitHub Repository</h3>
+            <div class="config-row">
+                <input type="text" id="repoOwner" placeholder="Repository Owner (e.g., username)" value="quan14">
+                <input type="text" id="repoName" placeholder="Repository Name (e.g., notes-repo)" value="MathsNotesUCL">
+                <button class="btn" onclick="loadRepository()">Load Notes</button>
+            </div>
+            <p style="font-size: 0.9rem; margin-top: 10px;">
+                📝 Example: For https://github.com/octocat/Hello-World, use owner: "octocat" and repo: "Hello-World"
+            </p>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="🔍 Search for notes, subjects, or file types..." oninput="filterNotes()">
+        </div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <div class="stat-item">
+                <div class="stat-number" id="totalFiles">0</div>
+                <div class="stat-label">Total Files</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalSubjects">0</div>
+                <div class="stat-label">Subjects</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="pdfCount">0</div>
+                <div class="stat-label">PDFs</div>
+            </div>
+        </div>
+
+        <div id="content">
+            <div class="loading">
+                👋 Enter GitHub repository details above to start browsing notes!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allFiles = [];
+        let organizedNotes = {};
+        let defaultBranch = 'main'; // Default fallback
+
+        function toggleMode() {
+            document.body.classList.toggle('light');
+            document.body.classList.toggle('dark');
+            const toggle = document.querySelector('.mode-toggle');
+            toggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+        }
+
+        async function loadRepository() {
+            const owner = document.getElementById('repoOwner').value.trim();
+            const repo = document.getElementById('repoName').value.trim();
+            
+            if (!owner || !repo) {
+                showError('Please enter both repository owner and name');
+                return;
+            }
+
+            const content = document.getElementById('content');
+            content.innerHTML = '<div class="loading">🔄 Loading repository contents...</div>';
+
+            try {
+                // Fetch repo info to get default branch
+                const repoResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+                if (!repoResponse.ok) {
+                    throw new Error(`Repository not found or not accessible (${repoResponse.status})`);
+                }
+                const repoData = await repoResponse.json();
+                defaultBranch = repoData.default_branch;
+
+                // Now fetch contents
+                const contentsResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents`);
+                if (!contentsResponse.ok) {
+                    throw new Error(`Contents not accessible (${contentsResponse.status})`);
+                }
+                const data = await contentsResponse.json();
+                allFiles = await processRepository(owner, repo, data);
+                organizedNotes = organizeNotesBySubject(allFiles);
+                
+                displayNotes();
+                updateStats();
+                
+            } catch (error) {
+                showError(`Error: ${error.message}`);
+            }
+        }
+
+        async function processRepository(owner, repo, contents, path = '') {
+            let files = [];
+            
+            for (const item of contents) {
+                if (item.type === 'file' && isNoteFile(item.name)) {
+                    files.push({
+                        name: item.name,
+                        path: path ? `${path}/${item.name}` : item.name,
+                        url: item.download_url,
+                        htmlUrl: `https://github.com/${owner}/${repo}/blob/${defaultBranch}/${encodeURIComponent(item.path)}`,
+                        size: item.size,
+                        type: getFileType(item.name)
+                    });
+                } else if (item.type === 'dir') {
+                    try {
+                        const subResponse = await fetch(item.url);
+                        const subContents = await subResponse.json();
+                        const subFiles = await processRepository(owner, repo, subContents, 
+                            path ? `${path}/${item.name}` : item.name);
+                        files = files.concat(subFiles);
+                    } catch (error) {
+                        console.log(`Could not access directory: ${item.name}`);
+                    }
+                }
+            }
+            
+            return files;
+        }
+
+        function isNoteFile(filename) {
+            const noteExtensions = ['.pdf', '.doc', '.docx', '.txt', '.md', '.ppt', '.pptx', '.jpg', '.jpeg', '.png'];
+            return noteExtensions.some(ext => filename.toLowerCase().endsWith(ext));
+        }
+
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const typeMap = {
+                'pdf': '📄',
+                'doc': '📝',
+                'docx': '📝', 
+                'txt': '📄',
+                'md': '📋',
+                'ppt': '📊',
+                'pptx': '📊',
+                'jpg': '🖼️',
+                'jpeg': '🖼️',
+                'png': '🖼️'
+            };
+            return typeMap[ext] || '📁';
+        }
+
+        function organizeNotesBySubject(files) {
+            const organized = {};
+            const subjectKeywords = {
+                'Algebra': ['algebra', 'linear', 'group', 'ring', 'field', 'module'],
+                'Analysis': ['analysis', 'real', 'complex', 'functional', 'measure'],
+                'Geometry': ['geometry', 'topology', 'differential geometry', 'algebraic geometry'],
+                'Probability': ['probability', 'stochastic', 'markov'],
+                'Statistics': ['statistics', 'stats', 'bayesian'],
+                'Mechanics': ['mechanics', 'fluid', 'quantum', 'classical'],
+                'Numerical Methods': ['numerical', 'computation', 'algorithm'],
+                'Number Theory': ['number theory', 'arithmetic'],
+                'Calculus': ['calculus', 'differential', 'integral'],
+                'Physics': ['physics', 'quantum', 'relativity', 'electromagnetism'],
+                'Chemistry': ['chemistry', 'organic', 'inorganic'],
+                'Biology': ['biology', 'genetics', 'ecology'],
+                'Computer Science': ['cs', 'programming', 'code', 'algorithm', 'data structure'],
+                'Humanities': ['history', 'english', 'literature', 'philosophy'],
+                'Mathematics': ['math', 'mathematics']  // Fallback for general math
+            };
+            
+            files.forEach(file => {
+                let subject = 'General';
+                const pathParts = file.path.split('/');
+                if (pathParts.length > 1) {
+                    subject = pathParts[0];
+                    // Handle subtopics if deeper
+                    if (pathParts.length > 2) {
+                        subject += ' > ' + pathParts.slice(1, -1).join(' > ');
+                    }
+                } else {
+                    const filenameLower = file.name.toLowerCase();
+                    for (const [subj, keywords] of Object.entries(subjectKeywords)) {
+                        if (keywords.some(kw => filenameLower.includes(kw))) {
+                            subject = subj;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!organized[subject]) {
+                    organized[subject] = [];
+                }
+                organized[subject].push(file);
+            });
+            
+            return organized;
+        }
+
+        function displayNotes() {
+            const content = document.getElementById('content');
+            
+            if (Object.keys(organizedNotes).length === 0) {
+                content.innerHTML = '<div class="loading">📁 No note files found in this repository</div>';
+                return;
+            }
+
+            let html = '<div class="subjects-grid">';
+            
+            Object.keys(organizedNotes).sort().forEach(subject => {
+                const files = organizedNotes[subject];
+                html += `
+                    <div class="subject-card" data-subject="${subject.toLowerCase()}">
+                        <h3>📚 ${subject}</h3>
+                        <ul class="notes-list">
+                `;
+                
+                files.forEach(file => {
+                    html += `
+                        <li class="note-item" data-filename="${file.name.toLowerCase()}">
+                            <a href="${file.htmlUrl}" target="_blank" class="note-link">
+                                <span class="file-icon">${getFileType(file.name)}</span>
+                                ${file.name}
+                                <small style="margin-left: auto; opacity: 0.7;">
+                                    ${formatFileSize(file.size)}
+                                </small>
+                            </a>
+                        </li>
+                    `;
+                });
+                
+                html += `
+                        </ul>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            content.innerHTML = html;
+        }
+
+        function filterNotes() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const subjectCards = document.querySelectorAll('.subject-card');
+            
+            subjectCards.forEach(card => {
+                const subject = card.dataset.subject;
+                const noteItems = card.querySelectorAll('.note-item');
+                let hasVisibleNotes = false;
+                
+                noteItems.forEach(item => {
+                    const filename = item.dataset.filename;
+                    const shouldShow = subject.includes(searchTerm) || filename.includes(searchTerm);
+                    
+                    item.style.display = shouldShow ? 'block' : 'none';
+                    if (shouldShow) hasVisibleNotes = true;
+                });
+                
+                card.style.display = hasVisibleNotes ? 'block' : 'none';
+            });
+        }
+
+        function updateStats() {
+            const stats = document.getElementById('stats');
+            const totalFiles = allFiles.length;
+            const totalSubjects = Object.keys(organizedNotes).length;
+            const pdfCount = allFiles.filter(file => file.name.toLowerCase().endsWith('.pdf')).length;
+            
+            document.getElementById('totalFiles').textContent = totalFiles;
+            document.getElementById('totalSubjects').textContent = totalSubjects;
+            document.getElementById('pdfCount').textContent = pdfCount;
+            
+            stats.style.display = totalFiles > 0 ? 'flex' : 'none';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function showError(message) {
+            const content = document.getElementById('content');
+            content.innerHTML = `<div class="error">❌ ${message}</div>`;
+        }
+
+        // Optional: Auto-load default repository on page load
+        // window.addEventListener('load', () => {
+        //     loadRepository();
+        // });
+    </script>
+</body>
+</html>
