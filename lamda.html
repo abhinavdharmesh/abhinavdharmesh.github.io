@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Newton's Rings – λ Calculator</title>
+<style>
+  body {
+    background: #0d0d0d;
+    color: #eee;
+    font-family: monospace;
+    text-align: center;
+    margin-top: 50px;
+  }
+  input[type=range] {
+    width: 400px;
+  }
+  textarea {
+    width: 400px;
+    height: 150px;
+    background: #111;
+    color: #0f0;
+    border: 1px solid #444;
+    font-family: monospace;
+  }
+  .value { color: #00ff88; font-weight: bold; }
+  .label { color: #aaa; }
+  table {
+    margin: auto;
+    border-collapse: collapse;
+  }
+  td, th {
+    border: 1px solid #555;
+    padding: 4px 10px;
+  }
+</style>
+</head>
+<body>
+
+<h2>λ = (D<sub>n+p</sub>² − D<sub>n</sub>²) / (4 R p)</h2>
+
+<!-- Radius of curvature -->
+<div>
+  <span class="label">Radius of Curvature R (mm): </span>
+  <span class="value" id="Rval">775</span><br>
+  <input type="range" id="R" min="100" max="1500" step="5" value="775">
+</div><br>
+
+<!-- p value -->
+<div>
+  <span class="label">Ring separation p: </span>
+  <span class="value" id="pval">5</span><br>
+  <input type="range" id="p" min="1" max="10" step="1" value="5">
+</div><br>
+
+<!-- Data input -->
+<div>
+  <span class="label">Enter D² values (mm²), one per line:</span><br>
+  <textarea id="Ddata">1.69
+3.61
+5.76
+7.29
+9.61
+11.56
+13.69
+15.37
+17.14
+19.36
+20.79
+22.85
+25.00
+26.83</textarea>
+</div><br>
+
+<button onclick="computeLambda()">Compute λ</button>
+
+<h3>Results</h3>
+<div id="output"></div>
+
+<script>
+function computeLambda() {
+  const R = parseFloat(document.getElementById("R").value);
+  const p = parseFloat(document.getElementById("p").value);
+  const Dvals = document.getElementById("Ddata").value
+                 .trim().split(/\s+/).map(Number);
+
+  let results = [];
+  for (let n = 0; n + p < Dvals.length; n++) {
+    const Dn2 = Dvals[n];
+    const Dnp2 = Dvals[n + p];
+    const lambda_mm = (Dnp2 - Dn2) / (4 * R * p);
+    const lambda_nm = lambda_mm * 1e6;
+    results.push({n: n+1, np: n+p+1, Dn2, Dnp2, lambda: lambda_nm});
+  }
+
+  const lambdas = results.map(r => r.lambda);
+  const mean = lambdas.reduce((a,b) => a+b, 0) / lambdas.length;
+  const sd = Math.sqrt(lambdas.map(l => (l-mean)**2).reduce((a,b)=>a+b,0)/lambdas.length);
+
+  document.getElementById("Rval").textContent = R.toFixed(0);
+  document.getElementById("pval").textContent = p.toFixed(0);
+
+  let html = "<table><tr><th>n</th><th>n+p</th><th>Dₙ²</th><th>Dₙ₊ₚ²</th><th>λ (nm)</th></tr>";
+  for (let r of results)
+    html += `<tr><td>${r.n}</td><td>${r.np}</td><td>${r.Dn2.toFixed(2)}</td><td>${r.Dnp2.toFixed(2)}</td><td>${r.lambda.toFixed(1)}</td></tr>`;
+  html += "</table><br>";
+  html += `<p>Mean λ = <span class="value">${mean.toFixed(1)}</span> nm</p>`;
+  html += `<p>Standard deviation σ = <span class="value">${sd.toFixed(1)}</span> nm</p>`;
+  document.getElementById("output").innerHTML = html;
+}
+computeLambda();
+</script>
+
+</body>
+</html>
