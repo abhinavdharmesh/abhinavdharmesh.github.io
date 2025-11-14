@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Spectroscope Resolving Power Calculator</title>
+<style>
+  body {
+    background: #0d0d0d;
+    color: #eee;
+    font-family: monospace;
+    margin: 20px;
+  }
+  .container {
+    max-width: 1200px;
+    margin: auto;
+  }
+  h2 {
+    text-align: center;
+    color: #00ff88;
+  }
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  .control-group {
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #333;
+  }
+  input[type=range] {
+    width: 100%;
+    margin: 10px 0;
+  }
+  .value { 
+    color: #00ff88; 
+    font-weight: bold; 
+    font-size: 1.2em;
+  }
+  .label { 
+    color: #aaa; 
+    display: block;
+    margin-bottom: 5px;
+  }
+  .results {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    margin-bottom: 20px;
+  }
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+  }
+  .result-label {
+    color: #aaa;
+  }
+  .result-value {
+    color: #00ff88;
+    font-weight: bold;
+  }
+  .theoretical {
+    color: #ff8800;
+  }
+  .match-indicator {
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  .match-good {
+    background: #004400;
+    color: #00ff00;
+    border: 2px solid #00ff00;
+  }
+  .match-close {
+    background: #444400;
+    color: #ffff00;
+    border: 2px solid #ffff00;
+  }
+  .match-far {
+    background: #440000;
+    color: #ff0000;
+    border: 2px solid #ff0000;
+  }
+  canvas {
+    width: 100%;
+    height: 400px;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 8px;
+  }
+  .info {
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #00ff88;
+    margin: 20px 0;
+    color: #ccc;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Spectroscope Resolving Power Calculator</h2>
+  <div class="info">
+    <strong>Theory:</strong> R.P. = nN = n(a/d) where a = slit width, d = grating spacing, n = order<br>
+    For Na D-lines: Theoretical R.P. = λ/Δλ = 589.3 nm / 0.6 nm ≈ 982
+  </div>
+
+  <div class="controls">
+    <div class="control-group">
+      <span class="label">Slit Width a (mm):</span>
+      <span class="value" id="aval">1.00</span>
+      <input type="range" id="a" min="0.1" max="3.0" step="0.05" value="1.00">
+    </div>
+
+    <div class="control-group">
+      <span class="label">Grating Lines per Inch:</span>
+      <span class="value" id="gratingval">15000</span>
+      <input type="range" id="grating" min="14000" max="16000" step="100" value="15000">
+    </div>
+
+    <div class="control-group">
+      <span class="label">Spectral Order n:</span>
+      <span class="value" id="nval">1</span>
+      <input type="range" id="n" min="1" max="3" step="1" value="1">
+    </div>
+
+    <div class="control-group">
+      <span class="label">Wavelength λ (nm):</span>
+      <span class="value" id="lambdaval">589.3</span>
+      <input type="range" id="lambda" min="400" max="700" step="0.1" value="589.3">
+    </div>
+  </div>
+
+  <div class="results">
+    <h3 style="color: #00ff88; margin-top: 0;">Calculated Results</h3>
+    <div class="result-row">
+      <span class="result-label">Grating Spacing d:</span>
+      <span class="result-value" id="dval">-</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Number of Lines Illuminated N:</span>
+      <span class="result-value" id="Nval">-</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Calculated Resolving Power:</span>
+      <span class="result-value" id="rpval">-</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Theoretical R.P. (Na D-lines):</span>
+      <span class="result-value theoretical" id="rp_theory">982</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Difference:</span>
+      <span class="result-value" id="diffval">-</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Percentage Error:</span>
+      <span class="result-value" id="errorval">-</span>
+    </div>
+  </div>
+
+  <div id="matchIndicator" class="match-indicator"></div>
+
+  <h3 style="color: #00ff88;">Resolving Power vs Slit Width</h3>
+  <canvas id="chart"></canvas>
+</div>
+
+<script>
+const canvas = document.getElementById('chart');
+const ctx = canvas.getContext('2d');
+
+// Set canvas resolution
+canvas.width = canvas.offsetWidth * 2;
+canvas.height = 800;
+
+function calculate() {
+  const a = parseFloat(document.getElementById('a').value) * 1e-3; // Convert to meters
+  const linesPerInch = parseFloat(document.getElementById('grating').value);
+  const n = parseFloat(document.getElementById('n').value);
+  const lambda = parseFloat(document.getElementById('lambda').value);
+  
+  // Update display values
+  document.getElementById('aval').textContent = (a * 1000).toFixed(2);
+  document.getElementById('gratingval').textContent = linesPerInch.toFixed(0);
+  document.getElementById('nval').textContent = n.toFixed(0);
+  document.getElementById('lambdaval').textContent = lambda.toFixed(1);
+  
+  // Calculate grating spacing
+  const linesPerMeter = linesPerInch / 0.0254;
+  const d = 1 / linesPerMeter;
+  
+  // Calculate number of lines illuminated
+  const N = a / d;
+  
+  // Calculate resolving power
+  const RP = n * N;
+  
+  // Theoretical RP for Na D-lines
+  const RP_theory = 982;
+  
+  // Calculate difference and error
+  const diff = RP - RP_theory;
+  const error = Math.abs(diff / RP_theory * 100);
+  
+  // Update results
+  document.getElementById('dval').textContent = (d * 1e6).toFixed(3) + ' µm';
+  document.getElementById('Nval').textContent = N.toFixed(0);
+  document.getElementById('rpval').textContent = RP.toFixed(0);
+  document.getElementById('diffval').textContent = diff.toFixed(0);
+  document.getElementById('errorval').textContent = error.toFixed(1) + '%';
+  
+  // Update match indicator
+  const matchDiv = document.getElementById('matchIndicator');
+  if (error < 5) {
+    matchDiv.className = 'match-indicator match-good';
+    matchDiv.textContent = '✓ EXCELLENT MATCH! Within 5% of theoretical value';
+  } else if (error < 15) {
+    matchDiv.className = 'match-indicator match-close';
+    matchDiv.textContent = '⚠ CLOSE! Within 15% of theoretical value';
+  } else {
+    matchDiv.className = 'match-indicator match-far';
+    matchDiv.textContent = '✗ Adjust parameters to get closer to theoretical value';
+  }
+  
+  // Draw chart
+  drawChart(a, linesPerInch, n, RP_theory);
+}
+
+function drawChart(currentA, currentGrating, currentN, RP_theory) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  const linesPerMeter = currentGrating / 0.0254;
+  const d = 1 / linesPerMeter;
+  
+  // Generate data points
+  const dataPoints = [];
+  const minA = 0.1e-3;
+  const maxA = 3.0e-3;
+  const steps = 200;
+  
+  for (let i = 0; i <= steps; i++) {
+    const a = minA + (maxA - minA) * i / steps;
+    const N = a / d;
+    const RP = currentN * N;
+    dataPoints.push({ a: a * 1000, RP: RP });
+  }
+  
+  // Chart dimensions
+  const padding = 80;
+  const chartWidth = canvas.width - 2 * padding;
+  const chartHeight = canvas.height - 2 * padding;
+  
+  // Find min/max for scaling
+  const maxRP = Math.max(...dataPoints.map(p => p.RP), RP_theory * 1.2);
+  const minRP = 0;
+  
+  // Draw axes
+  ctx.strokeStyle = '#444';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(padding, padding);
+  ctx.lineTo(padding, canvas.height - padding);
+  ctx.lineTo(canvas.width - padding, canvas.height - padding);
+  ctx.stroke();
+  
+  // Draw theoretical line
+  ctx.strokeStyle = '#ff8800';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([10, 5]);
+  const theoreticalY = canvas.height - padding - ((RP_theory - minRP) / (maxRP - minRP)) * chartHeight;
+  ctx.beginPath();
+  ctx.moveTo(padding, theoreticalY);
+  ctx.lineTo(canvas.width - padding, theoreticalY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  
+  // Draw theoretical label
+  ctx.fillStyle = '#ff8800';
+  ctx.font = 'bold 24px monospace';
+  ctx.fillText(`Theoretical R.P. = ${RP_theory}`, padding + 20, theoreticalY - 15);
+  
+  // Draw curve
+  ctx.strokeStyle = '#00ff88';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  
+  dataPoints.forEach((point, i) => {
+    const x = padding + (point.a - 0.1) / (3.0 - 0.1) * chartWidth;
+    const y = canvas.height - padding - ((point.RP - minRP) / (maxRP - minRP)) * chartHeight;
+    
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  });
+  ctx.stroke();
+  
+  // Draw current point
+  const currentX = padding + (currentA * 1000 - 0.1) / (3.0 - 0.1) * chartWidth;
+  const currentRP = currentN * (currentA / d);
+  const currentY = canvas.height - padding - ((currentRP - minRP) / (maxRP - minRP)) * chartHeight;
+  
+  ctx.fillStyle = '#ff0088';
+  ctx.beginPath();
+  ctx.arc(currentX, currentY, 12, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // Draw axes labels
+  ctx.fillStyle = '#aaa';
+  ctx.font = '28px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('Slit Width a (mm)', canvas.width / 2, canvas.height - 20);
+  
+  ctx.save();
+  ctx.translate(30, canvas.height / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Resolving Power (R.P.)', 0, 0);
+  ctx.restore();
+  
+  // Draw x-axis ticks
+  ctx.font = '20px monospace';
+  ctx.textAlign = 'center';
+  for (let i = 0; i <= 10; i++) {
+    const a = 0.1 + (3.0 - 0.1) * i / 10;
+    const x = padding + (a - 0.1) / (3.0 - 0.1) * chartWidth;
+    ctx.fillStyle = '#444';
+    ctx.fillRect(x - 1, canvas.height - padding, 2, 10);
+    ctx.fillStyle = '#aaa';
+    ctx.fillText(a.toFixed(1), x, canvas.height - padding + 35);
+  }
+  
+  // Draw y-axis ticks
+  ctx.textAlign = 'right';
+  for (let i = 0; i <= 5; i++) {
+    const rp = minRP + (maxRP - minRP) * i / 5;
+    const y = canvas.height - padding - (i / 5) * chartHeight;
+    ctx.fillStyle = '#444';
+    ctx.fillRect(padding - 10, y - 1, 10, 2);
+    ctx.fillStyle = '#aaa';
+    ctx.fillText(rp.toFixed(0), padding - 20, y + 8);
+  }
+}
+
+// Add event listeners
+document.getElementById('a').addEventListener('input', calculate);
+document.getElementById('grating').addEventListener('input', calculate);
+document.getElementById('n').addEventListener('input', calculate);
+document.getElementById('lambda').addEventListener('input', calculate);
+
+// Initial calculation
+calculate();
+</script>
+</body>
+</html>
