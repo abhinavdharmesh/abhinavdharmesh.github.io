@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fresnel Biprism – λ Calculator</title>
+
+<style>
+  body {
+    background: #0d0d0d;
+    color: #eee;
+    font-family: monospace;
+    text-align: center;
+    margin-top: 40px;
+  }
+  input[type=range] {
+    width: 400px;
+  }
+  .value { color: #00ff88; font-weight: bold; }
+  .label { color: #aaa; }
+  table {
+    margin: auto;
+    border-collapse: collapse;
+  }
+  td, th {
+    border: 1px solid #555;
+    padding: 4px 10px;
+  }
+  button {
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: #111;
+    border: 1px solid #444;
+    color: #0f0;
+    font-family: monospace;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #222;
+  }
+</style>
+</head>
+<body>
+
+<h2>λ = β (√(d₁ d₂)) / D</h2>
+<h4>All distances in mm, λ output in nm</h4>
+
+<!-- d1 -->
+<div>
+  <span class="label">d₁ (mm): </span>
+  <span class="value" id="d1val">1.6000</span><br>
+  <input type="range" id="d1" min="0.5" max="5" step="0.0001" value="1.6">
+</div><br>
+
+<!-- d2 -->
+<div>
+  <span class="label">d₂ (mm): </span>
+  <span class="value" id="d2val">1.0000</span><br>
+  <input type="range" id="d2" min="0.5" max="5" step="0.0001" value="1.0">
+</div><br>
+
+<!-- beta -->
+<div>
+  <span class="label">β (mm): </span>
+  <span class="value" id="betaval">0.3800</span><br>
+  <input type="range" id="beta" min="0.05" max="1" step="0.0001" value="0.38">
+</div><br>
+
+<!-- D -->
+<div>
+  <span class="label">D (mm): </span>
+  <span class="value" id="Dval">800.0000</span><br>
+  <input type="range" id="D" min="100" max="2000" step="0.0001" value="800">
+</div><br>
+
+<button onclick="computeLambda()">Compute λ</button>
+
+<h3>Results</h3>
+<div id="output"></div>
+
+<script>
+function computeLambda() {
+  const d1 = parseFloat(document.getElementById("d1").value);
+  const d2 = parseFloat(document.getElementById("d2").value);
+  const beta = parseFloat(document.getElementById("beta").value);
+  const D = parseFloat(document.getElementById("D").value);
+
+  // Virtual source separation (2d)
+  const two_d = Math.sqrt(d1 * d2);
+
+  // Wavelength in mm
+  const lambda_mm = (beta * two_d) / D;
+
+  // Convert mm → nm  (1 mm = 1e6 nm)
+  const lambda_nm = lambda_mm * 1e6;
+
+  // Update slider readouts (4 decimals)
+  document.getElementById("d1val").textContent = d1.toFixed(4);
+  document.getElementById("d2val").textContent = d2.toFixed(4);
+  document.getElementById("betaval").textContent = beta.toFixed(4);
+  document.getElementById("Dval").textContent = D.toFixed(4);
+
+  let html = `
+    <table>
+      <tr><th>Quantity</th><th>Value</th></tr>
+      <tr><td>√(d₁ d₂)</td><td>${two_d.toFixed(4)} mm</td></tr>
+      <tr><td>λ</td><td>${lambda_nm.toFixed(2)} nm</td></tr>
+    </table>
+  `;
+
+  document.getElementById("output").innerHTML = html;
+}
+
+computeLambda();
+</script>
+
+</body>
+</html>
