@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resolving Power of Telescope – Interactive Calculator</title>
+<style>
+  body {
+    background: #0f0f1a;
+    color: #ccffcc;
+    font-family: Consolas, monospace;
+    text-align: center;
+    margin-top: 30px;
+  }
+  h1 { color: #00ff99; }
+  .container { max-width: 600px; margin: auto; }
+  .slider {
+    margin: 20px 0;
+    background: #222;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #00ff9933;
+  }
+  input[type=range] { width: 70%; }
+  .value { color: #00ff88; font-weight: bold; font-size: 1.2em; }
+  button {
+    margin-top: 25px;
+    padding: 12px 30px;
+    background: #001a0d;
+    border: 2px solid #00ff99;
+    color: #00ff99;
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  button:hover { background: #00331a; }
+  table {
+    margin: 30px auto;
+    border-collapse: collapse;
+    background: #111;
+  }
+  td, th {
+    border: 1px solid #00ff99;
+    padding: 10px 20px;
+  }
+  th { background: #002b17; }
+</style>
+</head>
+<body>
+<h1>Resolving Power of Telescope Calculator</h1>
+<h3>Sodium light (λ = 589.3 nm) • Rayleigh Criterion</h3>
+
+<div class="container">
+
+  <!-- Objective diameter a -->
+  <div class="slider">
+    <span>a (objective diameter) = <span class="value" id="a_val">23.0</span> mm (±0.1 mm)</span><br>
+    <input type="range" id="a" min="20" max="30" step="0.01" value="23">
+  </div>
+
+  <!-- Distance d -->
+  <div class="slider">
+    <span>d (slits → telescope) = <span class="value" id="d_val">2600</span> mm (±10 mm)</span><br>
+    <input type="range" id="d" min="2000" max="5000" step="1" value="2600">
+  </div>
+
+  <!-- Aperture when indistinguishable a' -->
+  <div class="slider">
+    <span>a' (aperture at merging) = <span class="value" id="ap_val">1.150</span> mm (±0.025 mm)</span><br>
+    <input type="range" id="ap" min="0.5" max="2.5" step="0.001" value="1.15">
+  </div>
+
+  <!-- Slit separation D -->
+  <div class="slider">
+    <span>D (slit separation) = <span class="value" id="D_val">1.015</span> mm (±0.10 mm)</span><br>
+    <input type="range" id="D" min="0.5" max="3" step="0.001" value="1.015">
+  </div>
+
+  <button onclick="calculate()">Calculate Resolving Power</button>
+
+  <div id="results"></div>
+</div>
+
+<script>
+function updateDisplays() {
+  document.getElementById("a_val").textContent  = (document.getElementById("a").value / 10).toFixed(1);   // shown in mm
+  document.getElementById("d_val").textContent  = document.getElementById("d").value;
+  document.getElementById("ap_val").textContent = parseFloat(document.getElementById("ap").value).toFixed(3);
+  document.getElementById("D_val").textContent  = parseFloat(document.getElementById("D").value).toFixed(3);
+}
+
+function calculate() {
+  updateDisplays();
+
+  const a  = parseFloat(document.getElementById("a").value) / 1000;   // mm → m
+  const d  = parseFloat(document.getElementById("d").value) / 1000;   // mm → m
+  const ap = parseFloat(document.getElementById("ap").value) / 1000;  // mm → m
+  const D  = parseFloat(document.getElementById("D").value) / 1000;   // mm → m
+  const λ  = 589.3e-9;  // sodium D-line average in metres
+
+  // Practical resolving power
+  const RP_practical = (a * d) / (ap * D);
+
+  // Theoretical resolving power (Rayleigh)
+  const RP_theoretical = a / (1.22 * λ);
+
+  const html = `
+    <table>
+      <tr><th>Quantity</th><th>Value</th></tr>
+      <tr><td>Practical RP</td><td><strong style="color:#00ff99;">${RP_practical.toExponential(2)}</strong></td></tr>
+      <tr><td>Theoretical RP</td><td>${RP_theoretical.toExponential(2)}</td></tr>
+      <tr><td>Ratio (Practical / Theoretical)</td><td>${(RP_practical / RP_theoretical).toFixed(2)}</td></tr>
+      <tr><td>Angular resolution (practical)</td><td>${((ap * D) / (a * d) * 206265).toFixed(1)} arcsec</td></tr>
+      <tr><td>Angular resolution (theoretical)</td><td>${(1.22 * λ / a * 206265).toFixed(1)} arcsec</td></tr>
+    </table>
+    <p style="margin-top:20px; font-size:0.9em;">
+      Your measured values give RP ≈ <b>5.12 × 10⁴</b> (exactly what you got in the lab).<br>
+      Move the sliders to see how uncertainty in D or subjective merging point (a') affects the result the most!
+    </p>
+  `;
+  document.getElementById("results").innerHTML = html;
+}
+
+// Initialize
+updateDisplays();
+calculate();
+
+// Update displays live while dragging
+document.querySelectorAll('input[type=range]').forEach(slider => {
+  slider.addEventListener('input', () => {
+    updateDisplays();
+    calculate();
+  });
+});
+</script>
+</body>
+</html>
