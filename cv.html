@@ -3,112 +3,151 @@
 <head>
   <meta charset="UTF-8">
   <title>Abhinav Dharmesh - CV</title>
-<style>
-  body {
-    font-family: 'Libertinus Serif', serif;
-    margin: 40px auto;
-    max-width: 800px;
-    line-height: 1.6;
-    color: #222;
-  }
-  h1, h2 {
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 4px;
-  }
-  h1 {
-    text-align: center;
-    margin-bottom: 5px;
-  }
-  .contact {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 0.95em;
-  }
-  a {
-    color: #0066cc;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-  ul {
-    margin: 0;
-    padding-left: 20px;
-  }
-  .section {
-    margin-top: 20px;
-  }
-  .skills-table, .lang-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .skills-table td, .lang-table td {
-    padding: 5px 10px;
-    vertical-align: top;
-  }
-</style>
+  <style>
+    body {
+      font-family: 'Libertinus Serif', serif;
+      margin: 40px auto;
+      max-width: 850px;
+      line-height: 1.7;
+      color: #222;
+    }
+    h1, h2 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 6px;
+      margin-top: 30px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .contact {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 0.97em;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul {
+      margin: 8px 0 15px 20px;
+      padding-left: 20px;
+    }
+    .section {
+      margin-top: 25px;
+    }
+    .skills-table, .lang-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    .skills-table td, .lang-table td {
+      padding: 8px 12px;
+      vertical-align: top;
+      border: 1px solid #ccc;
+    }
+    .skills-table td:first-child {
+      font-weight: bold;
+      width: 28%;
+      background-color: #f9f9f9;
+    }
+    sub {
+      font-size: 0.85em;
+    }
+  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <h1>Abhinav Dharmesh</h1>
-  <p>
-    <a href="mailto:dharmeshabhinav@gmail.com">dharmeshabhinav@gmail.com</a> |
-    <a href="https://github.com/abhinavdharmesh">GitHub</a> |
-    <a href="https://linkedin.com/in/abhinavdharmesh">LinkedIn</a> |
-    Agra, India
+  <p class="contact">
+    <a href="mailto:dharmeshabhinav@gmail.com">dharmeshabhinav@gmail.com</a> &nbsp;|&nbsp; 
+    <a href="https://github.com/abhinavdharmesh" target="_blank">GitHub</a> &nbsp;|&nbsp; 
+    <a href="https://linkedin.com/in/abhinavdharmesh" target="_blank">LinkedIn</a><br>
+    Agra, Uttar Pradesh, India
   </p>
 
   <h2>Education</h2>
-  <p><strong>Bachelor of Science (Honours) in Physics</strong> (2024 – Present)<br>
+  <p><strong>Bachelor of Science in Physics</strong> (2nd Year, 4th Semester)<br>
   Dayalbagh Educational Institute (DEI), Agra, India<br>
+  <strong>Current GPA:</strong> 6.5/10.0 (2024 – Present)</p>
+
+  <h2>Research Experience</h2>
+  <p><strong>Cosmic Ray Physics Research</strong> (2024 – Present)<br>
+  Dayalbagh Educational Institute (DEI), Agra</p>
+  <ul>
+    <li>Conducting atmospheric modeling studies for extensive air shower simulations using <strong>CORSIKA</strong></li>
+    <li>Investigating effects of atmospheric and hadronic models on <strong>Xmax</strong> determination in vertical proton showers</li>
+    <li>Implementing <strong>GDAS</strong>-based atmospheric studies for the DEASA (Dayalbagh Educational Air Shower Array) experiment</li>
+    <li>Developed automated data processing pipelines for analyzing cosmic ray simulation outputs</li>
+    <li>Managing computational workflows on high-performance computing infrastructure (<strong>NVIDIA DGX-1</strong>)</li>
+  </ul>
 
   <h2>Conference Presentations</h2>
   <ul>
-    <li><strong>"Comparative Study of X<sub>max</sub> in Vertical Proton Showers Using Custom Atmospheric Models"</strong><br>
-    <em>Sonali Bhatnagar and Abhinav Dharmesh</em>
-      <ul>
-        <li>Accepted for poster presentation at 69th DAE-BRNS Symposium on Nuclear Physics (SNP-2025), December 8–12, 2025, organized by Department of Atomic Energy. Proceedings to be published in Book Chapter: 69th DAE Symposium on Nuclear Physics Proceedings.</li>
-        <li>Accepted for poster presentation at ASI Symposium-005: Interdisciplinary Aspects of Multi-wavelength Optics and Instrumentation in Observational Sciences, Physical Research Laboratory, Ahmedabad, January 7–9, 2026, organized by Astronomical Society of India.</li>
-      </ul>
+    <li><strong>“Comparative Study of Xmax in Vertical Proton Showers Using Custom Atmospheric Models”</strong><br>
+      <em>Poster Presentation</em><br>
+      69th DAE-BRNS Symposium on Nuclear Physics, December 2025<br>
+      Published in Book Chapter - 69th DAE Symposium in Nuclear Physics Proceedings, Department of Atomic Energy
     </li>
-    <li><strong>"Simulation-Based Study of Atmospheric and Hadronic Model Effects on X<sub>max</sub> Determination"</strong><br>
-    <em>Abhinav Dharmesh</em>
-      <ul>
-        <li>Paper and poster accepted at 7th Winter Session International Conference on Dayalbagh (Art) Science (& Engineering) of (Evolutionary/Re-Evolutionary) Consciousness (DSC), January 1, 2026, organized by Dayalbagh Educational Institute, Agra.</li>
-      </ul>
+    <li><strong>“Simulation-Based Study of Atmospheric and Hadronic Model Effects on Xmax Determination”</strong><br>
+      <em>Paper & Poster Presentation</em><br>
+      7th Winter Session International Conference on Dayalbagh Science of Consciousness, January 2026<br>
+      Dayalbagh Educational Institute, Agra
+    </li>
+    <li><strong>“Global Data Assimilation System (GDAS)-based Atmospheric Study For DEASA”</strong><br>
+      <em>Abstract Submitted</em><br>
+      Astronomical Society of India (ASI) Annual Meeting, January 2026<br>
+      Symposium 005: Interdisciplinary Aspects of Multi-wavelength Optics and Instrumentation
     </li>
   </ul>
 
-  <h2>Research & Projects</h2>
+  <h2>Technical Projects</h2>
   <ul>
-    <li><strong>Atmospheric Modeling for Cosmic Ray Air Shower Simulations</strong> (2024 – Present)<br>
-    Conducted comparative study of shower maximum depth (X<sub>max</sub>) in vertical proton showers using CORSIKA 7.7550 with GDAS-derived atmospheric profiles. Simulated 10<sup>13</sup> eV showers at Agra, India (DEASA site) and Łódź, Poland using multiple hadronic interaction models (QGSJETII-04, SIBYLL 2.3d, GHEISHA, UrQMD). Demonstrated that atmospheric fit quality dominates X<sub>max</sub> stability, providing critical insights for systematic uncertainty assessment in scintillator-based air shower arrays.</li>
-    <li><strong>Autonomous Cosmic Ray Data Logger & Remote Monitoring System</strong> (2025 – Present)<br>
-    Designed a fully automated data acquisition and logging system using Arduino and Raspberry Pi 400 to record muon detector outputs and environmental sensors (BMP180, DHT11). Implemented:
-      <ul>
-        <li>Real-time data validation, automated CSV logging, and 24/7 autonomous operation</li>
-        <li>Remote headless monitoring via permanent ngrok tunnel for instant access to live data</li>
-        <li>Automated backups to multiple external storage devices for redundancy and long-term data integrity</li>
-      </ul>
-    Demonstrates hands-on experience in electronics, instrumentation, automation, and lab-grade experimental workflows.</li>
+    <li><strong>CORSIKA Simulation Automation Pipeline</strong> (2025)<br>
+      Designed and implemented automated bash scripts for high-throughput CORSIKA simulations on NVIDIA DGX-1 with tmux session management, automatic logging, energy sweeps, and error handling.</li>
+    
+    <li><strong>GDAS Atmospheric Data Extraction Tools</strong> (2024–2025)<br>
+      Python-based tools for batch extraction and parallel processing of multi-week GDAS atmospheric profiles with support for custom ground levels and coordinates.</li>
+    
+    <li><strong>CORSIKA Track Visualization System</strong> (2025)<br>
+      High-performance 3D visualization framework using OpenGL with frustum culling, LOD, GPU batching, and interactive controls for rendering air shower particle tracks.</li>
+    
+    <li><strong>CORSIKA to Geant4 Data Converter</strong> (2025)<br>
+      Python converter using corsikaio and PyROOT to transform CORSIKA DAT files into Geant4-compatible ROOT TTree format.</li>
+    
+    <li><strong>Raspberry Pi 400 Autonomous Data Logger</strong> (2024–2025)<br>
+      24/7 autonomous data acquisition system with real-time validation, automated CSV logging, ngrok remote monitoring, and multi-device backup.</li>
+    
+    <li><strong>Lateral Distribution Analysis Tools</strong> (2024–2025)<br>
+      Python tools for analyzing and visualizing particle lateral distributions from CORSIKA output with automated publication-quality plotting.</li>
   </ul>
 
-  <h2>Skills</h2>
-  <table border="1">
-    <tr><td><strong>Simulation Tools:</strong></td><td>CORSIKA (<strong>CO</strong>smic Ray <strong>SI</strong>mulations for <strong>KA</strong>scade), GEANT4 (<strong>GE</strong>ometry <strong>AN</strong>d <strong>T</strong>racking 4)</td></tr>
-    <tr><td><strong>Programming:</strong></td><td>Python, C++, Bash scripting</td></tr>
-    <tr><td><strong>Data Analysis:</strong></td><td>WOLFRAM <i>Mathematica</i>, CERN-ROOT framework, matplotlib, pandas, NumPy, SciPy</td></tr>
-    <tr><td><strong>Operating Systems:</strong></td><td>Linux (Arch, Ubuntu, Debian), Windows</td></tr>
-    <tr><td><strong>Hardware & Instrumentation:</strong></td><td>Arduino, Raspberry Pi, sensor integration, DAQ systems</td></tr>
-    <tr><td><strong>Others:</strong></td><td>LaTeX, Git, scientific writing, technical documentation</td></tr>
+  <h2>Technical Skills</h2>
+  <table class="skills-table">
+    <tr><td>Simulation Software</td><td>CORSIKA (advanced), Geant4 (basic)</td></tr>
+    <tr><td>Programming Languages</td><td>Python (advanced), C++, Bash scripting</td></tr>
+    <tr><td>Data Analysis & Visualization</td><td>CERN ROOT, Matplotlib, NumPy, Pandas, SciPy</td></tr>
+    <tr><td>High-Performance Computing</td><td>NVIDIA DGX-1, tmux, SSH, parallel job execution</td></tr>
+    <tr><td>Development Tools</td><td>Git, Linux CLI, LaTeX, CMake/Make</td></tr>
+    <tr><td>Hardware & Instrumentation</td><td>Raspberry Pi, Arduino, sensor integration, data acquisition systems</td></tr>
+    <tr><td>Others</td><td>Scientific writing, technical documentation, AI-assisted development</td></tr>
   </table>
 
   <h2>Languages</h2>
-  <table border="1">
-    <tr><td>English</td><td>Full Professional Proficiency</td></tr>
+  <table class="lang-table">
+    <tr><td>English</td><td>Fluent</td></tr>
     <tr><td>Hindi</td><td>Native</td></tr>
   </table>
+
+  <p style="text-align: right; font-size: 0.85em; margin-top: 40px; color: #666;">
+    Last updated: February 10, 2026
+  </p>
+
 </body>
 </html>
