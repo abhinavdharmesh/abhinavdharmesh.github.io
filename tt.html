@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Schedule</title>
+    <!-- Google Fonts for beautiful typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary: #4f46e5;
+            
+            /* Course Color Palette (Beautiful Pastels) */
+            --phm501-bg: #e0f2fe; --phm501-txt: #0369a1; --phm501-border: #bae6fd;
+            --phm502-bg: #f3e8ff; --phm502-txt: #6b21a8; --phm502-border: #e9d5ff;
+            --phm503-bg: #dcfce7; --phm503-txt: #166534; --phm503-border: #bbf7d0;
+            --phm504-bg: #fef3c7; --phm504-txt: #92400e; --phm504-border: #fde68a;
+            --phm505-bg: #ffe4e6; --phm505-txt: #9f1239; --phm505-border: #fecdd3;
+            --mam5x1-bg: #ccfbf1; --mam5x1-txt: #115e59; --mam5x1-border: #99f6e4;
+            --mam5x2-bg: #e0e7ff; --mam5x2-txt: #3730a3; --mam5x2-border: #c7d2fe;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 2rem 1rem;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Responsive Table Wrapper */
+        .table-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05), 0 0 0 1px rgb(0 0 0 / 0.05);
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 0.9rem;
+            min-width: 900px; /* Ensures the table elements stay readable on mobile scroll */
+        }
+
+        /* Header Styling */
+        th {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 1rem 0.75rem;
+            border-bottom: 2px solid #1e293b;
+        }
+
+        th .slot-num {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 2px;
+        }
+
+        th .slot-time {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: #94a3b8;
+        }
+
+        /* Body Rows */
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            transition: background-color 0.2s;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Left-most Day Column */
+        td.day-col {
+            font-weight: 700;
+            color: #1e293b;
+            background-color: #f1f5f9;
+            width: 80px;
+            font-size: 0.95rem;
+            border-right: 2px solid var(--border-color);
+        }
+
+        /* Empty Cell Dash */
+        .empty {
+            color: #cbd5e1;
+            font-weight: 300;
+            font-size: 1.2rem;
+        }
+
+        /* Class Schedule Card styling */
+        .course {
+            padding: 0.6rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            line-height: 1.25;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .course .loc {
+            display: block;
+            font-size: 0.75rem;
+            font-style: italic;
+            font-weight: 500;
+            margin-top: 4px;
+            opacity: 0.85;
+        }
+
+        /* CSS Classes mapped to specific courses */
+        .phm501 { background-color: var(--phm501-bg); color: var(--phm501-txt); border: 1px solid var(--phm501-border); }
+        .phm502 { background-color: var(--phm502-bg); color: var(--phm502-txt); border: 1px solid var(--phm502-border); }
+        .phm503 { background-color: var(--phm503-bg); color: var(--phm503-txt); border: 1px solid var(--phm503-border); }
+        .phm504 { background-color: var(--phm504-bg); color: var(--phm504-txt); border: 1px solid var(--phm504-border); }
+        .phm505 { background-color: var(--phm505-bg); color: var(--phm505-txt); border: 1px solid var(--phm505-border); }
+        .mam5x1 { background-color: var(--mam5x1-bg); color: var(--mam5x1-txt); border: 1px solid var(--mam5x1-border); }
+        .mam5x2 { background-color: var(--mam5x2-bg); color: var(--mam5x2-txt); border: 1px solid var(--mam5x2-border); }
+
+        /* Today's Row Highlight Styling */
+        tr.today-active {
+            background-color: #f0fdf4 !important; /* Soft green backdrop */
+        }
+        tr.today-active td.day-col {
+            background-color: #22c55e !important;
+            color: white !important;
+            position: relative;
+        }
+
+        /* Hover Styles */
+        tr:hover td:not(.day-col) {
+            background-color: #f8fafc;
+        }
+
+        /* Legend Panel */
+        .legend {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .legend-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #334155;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .legend-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        /* Scroll Bar Styling for Custom container */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Weekly Academic Schedule</h1>
+            <p class="subtitle">Quick-view schedule planner. The current day's row is highlighted automatically.</p>
+        </header>
+
+        <!-- Main Timetable Card -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="border-top-left-radius: 12px;">Day</th>
+                        <th><span class="slot-num">I</span><span class="slot-time">7:15 - 8:10</span></th>
+                        <th><span class="slot-num">II</span><span class="slot-time">8:10 - 9:05</span></th>
+                        <th><span class="slot-num">III</span><span class="slot-time">9:05 - 10:00</span></th>
+                        <th><span class="slot-num">IV</span><span class="slot-time">10:30 - 11:25</span></th>
+                        <th><span class="slot-num">V</span><span class="slot-time">11:25 - 12:20</span></th>
+                        <th><span class="slot-num">VI</span><span class="slot-time">12:20 - 1:15</span></th>
+                        <th><span class="slot-num">VII</span><span class="slot-time">1:15 - 2:10</span></th>
+                        <th><span class="slot-num">VIII</span><span class="slot-time">2:10 - 3:05</span></th>
+                        <th><span class="slot-num">IX</span><span class="slot-time">3:05 - 4:00</span></th>
+                        <th style="border-top-right-radius: 12px;"><span class="slot-num">X</span><span class="slot-time">4:00 - 4:55</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="row-MON">
+                        <td class="day-col">MON</td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course phm501">PHM 501 <span class="loc">DL</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course phm503">PHM 503 <span class="loc">R20</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course phm504">PHM 504 <span class="loc">DL</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                    </tr>
+                    <tr id="row-TUE">
+                        <td class="day-col">TUE</td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course phm503">PHM 503 <span class="loc">R20</span></div></td>
+                        <td><div class="course phm504">PHM 504 <span class="loc">DL</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                    </tr>
+                    <tr id="row-WED">
+                        <td class="day-col">WED</td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course phm501">PHM 501 <span class="loc">DL</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course phm502">PHM 502 <span class="loc">LR5</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                    </tr>
+                    <tr id="row-THU">
+                        <td class="day-col">THU</td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course phm503">PHM 503 <span class="loc">R20</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                    </tr>
+                    <tr id="row-FRI">
+                        <td class="day-col">FRI</td>
+                        <td><div class="course mam5x1">MAM 5X1 <span class="loc">Hall</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course mam5x2">MAM 5X2 <span class="loc">Hall</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course phm505">PHM 505 <span class="loc">EL</span></div></td>
+                        <td><span class="empty">-</span></td>
+                    </tr>
+                    <tr id="row-SAT">
+                        <td class="day-col" style="border-bottom-left-radius: 12px;">SAT</td>
+                        <td><span class="empty">-</span></td>
+                        <td><div class="course mam5x2">MAM 5X2 <span class="loc">Hall</span></div></td>
+                        <td><div class="course phm503">PHM 503 <span class="loc">R20</span></div></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td><span class="empty">-</span></td>
+                        <td style="border-bottom-right-radius: 12px;"><span class="empty">-</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Course Code Legend Card -->
+        <div class="legend">
+            <div class="legend-title">Subject Legend</div>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-color phm501"></div>
+                    <span>PHM 501 (DL)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color phm502"></div>
+                    <span>PHM 502 (LR5)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color phm503"></div>
+                    <span>PHM 503 (R20)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color phm504"></div>
+                    <span>PHM 504 (DL)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color phm505"></div>
+                    <span>PHM 505 (EL)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color mam5x1"></div>
+                    <span>MAM 5X1 (Hall)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color mam5x2"></div>
+                    <span>MAM 5X2 (Hall)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script to dynamically highlight the current day -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const daysMap = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            const todayIndex = new Date().getDay(); 
+            const todayName = daysMap[todayIndex];
+            
+            const activeRow = document.getElementById(`row-${todayName}`);
+            if (activeRow) {
+                activeRow.classList.add('today-active');
+            }
+        });
+    </script>
+</body>
+</html>
