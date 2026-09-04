@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeoCrop Image Cropper</title>
+    <title>Image Cropper | Neobrutalism</title>
     <style>
         :root {
             --bg-yellow: #FFDF00;
@@ -17,11 +17,13 @@
             background-color: var(--bg-yellow);
             color: var(--hard-black);
             margin: 0;
-            padding: 40px 20px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             font-weight: 800;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
         .controls {
@@ -29,27 +31,43 @@
             padding: 20px;
             border: var(--border-width) solid var(--hard-black);
             box-shadow: 8px 8px 0px var(--hard-black);
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             display: flex;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
+            width: 100%;
+            max-width: 900px;
+            box-sizing: border-box;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         button, input[type="file"]::file-selector-button {
             background: var(--pure-white);
             color: var(--hard-black);
             border: 3px solid var(--hard-black);
-            padding: 12px 24px;
+            padding: 12px 20px;
             cursor: pointer;
             font-family: inherit;
             font-weight: 900;
             font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 5px 5px 0px var(--hard-black);
+            box-shadow: 4px 4px 0px var(--hard-black);
             transition: all 0.1s ease-in-out;
+        }
+
+        input[type="file"] {
+            max-width: 100%;
+            font-weight: bold;
         }
 
         button:hover, input[type="file"]::file-selector-button:hover {
@@ -57,7 +75,7 @@
         }
 
         button:active, input[type="file"]::file-selector-button:active {
-            transform: translate(5px, 5px);
+            transform: translate(4px, 4px);
             box-shadow: 0px 0px 0px var(--hard-black);
         }
 
@@ -66,9 +84,40 @@
             color: var(--pure-white);
         }
 
+        .custom-inputs {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1.2rem;
+        }
+
+        input[type="number"] {
+            width: 70px;
+            border: 3px solid var(--hard-black);
+            padding: 10px 5px;
+            font-family: inherit;
+            font-weight: 900;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            box-shadow: 3px 3px 0px var(--hard-black);
+        }
+        
+        input[type="number"]:focus {
+            background: rgba(255, 223, 0, 0.3);
+        }
+        
+        /* Remove arrows from number inputs */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
         #downloadBtn {
             background: var(--hard-black);
             color: var(--pure-white);
+            width: 100%;
         }
 
         #downloadBtn:hover {
@@ -81,28 +130,46 @@
             display: none;
             background: var(--pure-white);
             border: var(--border-width) solid var(--hard-black);
-            box-shadow: 12px 12px 0px var(--hard-black);
-            max-width: 90vw;
-            max-height: 70vh;
+            box-shadow: 8px 8px 0px var(--hard-black);
+            max-width: 100%;
             padding: 0;
             line-height: 0;
+            overflow: hidden; 
         }
 
         #preview {
             display: block;
             max-width: 100%;
-            max-height: 70vh;
+            max-height: 60vh;
             user-select: none;
+            -webkit-user-drag: none;
         }
 
         #cropBox {
             position: absolute;
             border: 4px dashed var(--pure-white);
             outline: 4px dashed var(--hard-black);
-            background: rgba(255, 223, 0, 0.25);
+            background: rgba(255, 223, 0, 0.3);
             cursor: crosshair;
             box-sizing: border-box;
             backdrop-filter: grayscale(20%);
+            touch-action: none; /* Prevents browser zooming/panning on touch */
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                padding: 15px;
+            }
+            .control-group {
+                width: 100%;
+            }
+            button {
+                flex-grow: 1;
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
         }
     </style>
 </head>
@@ -110,8 +177,21 @@
 
     <div class="controls">
         <input type="file" id="fileInput" accept="image/png, image/jpeg, image/tiff">
-        <button id="btn512" class="active" onclick="setPreset(512)">512 × 512</button>
-        <button id="btn1024" onclick="setPreset(1024)">1024 × 1024</button>
+        
+        <div class="control-group">
+            <button id="btn512" class="preset-btn active" onclick="setPreset(512, 512, 'btn512')">512²</button>
+            <button id="btn1024" class="preset-btn" onclick="setPreset(1024, 1024, 'btn1024')">1024²</button>
+        </div>
+
+        <div class="control-group">
+            <div class="custom-inputs">
+                <input type="number" id="customW" placeholder="W">
+                <span>×</span>
+                <input type="number" id="customH" placeholder="H">
+            </div>
+            <button id="btnCustom" class="preset-btn" onclick="applyCustom()">Custom</button>
+        </div>
+
         <button id="downloadBtn" onclick="downloadCrop()">Download Crop</button>
     </div>
 
@@ -126,9 +206,17 @@
         const workspace = document.getElementById('workspace');
         const cropBox = document.getElementById('cropBox');
         
-        let currentSize = 512;
+        const inputW = document.getElementById('customW');
+        const inputH = document.getElementById('customH');
+
+        let cropWidth = 512;
+        let cropHeight = 512;
         let isDragging = false;
         let startX, startY, boxLeft, boxTop;
+
+        // Load saved custom resolutions from Local Storage
+        if (localStorage.getItem('sih_crop_w')) inputW.value = localStorage.getItem('sih_crop_w');
+        if (localStorage.getItem('sih_crop_h')) inputH.value = localStorage.getItem('sih_crop_h');
 
         function generateRandomName() {
             const array = new Uint32Array(5);
@@ -152,13 +240,29 @@
             reader.readAsDataURL(file);
         });
 
-        function setPreset(size) {
-            currentSize = size;
-            document.getElementById('btn512').classList.toggle('active', size === 512);
-            document.getElementById('btn1024').classList.toggle('active', size === 1024);
+        function setPreset(w, h, btnId) {
+            cropWidth = w;
+            cropHeight = h;
+            
+            // Toggle active styling
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            if (btnId) document.getElementById(btnId).classList.add('active');
+            
             if (preview.src) {
                 updateCropBoxSize();
                 centerCropBox();
+            }
+        }
+
+        function applyCustom() {
+            const w = parseInt(inputW.value);
+            const h = parseInt(inputH.value);
+            if (w > 0 && h > 0) {
+                localStorage.setItem('sih_crop_w', w);
+                localStorage.setItem('sih_crop_h', h);
+                setPreset(w, h, 'btnCustom');
+            } else {
+                alert("Please enter valid positive numbers for width and height.");
             }
         }
 
@@ -168,50 +272,87 @@
 
         function updateCropBoxSize() {
             const ratio = getScaleRatio();
-            const visualSize = currentSize * ratio;
+            let visualW = cropWidth * ratio;
+            let visualH = cropHeight * ratio;
             
-            const maxDimension = Math.min(preview.clientWidth, preview.clientHeight);
-            const finalSize = Math.min(visualSize, maxDimension);
+            // Scale box down uniformly if it exceeds the preview constraints,
+            // mapping it properly while preserving aspect ratio.
+            if (visualW > preview.clientWidth || visualH > preview.clientHeight) {
+                const fitScale = Math.min(
+                    preview.clientWidth / visualW,
+                    preview.clientHeight / visualH
+                );
+                visualW *= fitScale;
+                visualH *= fitScale;
+            }
 
-            cropBox.style.width = finalSize + 'px';
-            cropBox.style.height = finalSize + 'px';
+            cropBox.style.width = visualW + 'px';
+            cropBox.style.height = visualH + 'px';
         }
 
         function centerCropBox() {
-            const boxWidth = parseFloat(cropBox.style.width);
-            const left = (preview.clientWidth - boxWidth) / 2;
-            const top = (preview.clientHeight - boxWidth) / 2;
+            const boxW = parseFloat(cropBox.style.width);
+            const boxH = parseFloat(cropBox.style.height);
+            const left = (preview.clientWidth - boxW) / 2;
+            const top = (preview.clientHeight - boxH) / 2;
             setCropBoxPos(left, top);
         }
 
         function setCropBoxPos(left, top) {
-            const boxWidth = parseFloat(cropBox.style.width);
-            left = Math.max(0, Math.min(left, preview.clientWidth - boxWidth));
-            top = Math.max(0, Math.min(top, preview.clientHeight - boxWidth));
+            const boxW = parseFloat(cropBox.style.width);
+            const boxH = parseFloat(cropBox.style.height);
+            
+            left = Math.max(0, Math.min(left, preview.clientWidth - boxW));
+            top = Math.max(0, Math.min(top, preview.clientHeight - boxH));
             
             cropBox.style.left = left + 'px';
             cropBox.style.top = top + 'px';
         }
 
-        cropBox.addEventListener('mousedown', (e) => {
+        // UNIFIED MOUSE & TOUCH EVENT LOGIC
+        function getClientPos(e) {
+            if (e.touches && e.touches.length > 0) {
+                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+            return { x: e.clientX, y: e.clientY };
+        }
+
+        function handleDragStart(e) {
             isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
+            const pos = getClientPos(e);
+            startX = pos.x;
+            startY = pos.y;
             boxLeft = parseFloat(cropBox.style.left) || 0;
             boxTop = parseFloat(cropBox.style.top) || 0;
-            e.preventDefault(); 
-        });
+            
+            // Prevent default drag behaviors for mouse
+            if (e.type === 'mousedown') e.preventDefault(); 
+        }
 
-        document.addEventListener('mousemove', (e) => {
+        function handleDragMove(e) {
             if (!isDragging) return;
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
+            // Prevent scrolling on touch devices while moving the box
+            if (e.type === 'touchmove') e.preventDefault(); 
+            
+            const pos = getClientPos(e);
+            const dx = pos.x - startX;
+            const dy = pos.y - startY;
             setCropBoxPos(boxLeft + dx, boxTop + dy);
-        });
+        }
 
-        document.addEventListener('mouseup', () => {
+        function handleDragEnd() {
             isDragging = false;
-        });
+        }
+
+        // Attach Mouse Events
+        cropBox.addEventListener('mousedown', handleDragStart);
+        document.addEventListener('mousemove', handleDragMove);
+        document.addEventListener('mouseup', handleDragEnd);
+
+        // Attach Touch Events (passive: false is necessary to allow e.preventDefault)
+        cropBox.addEventListener('touchstart', handleDragStart, { passive: false });
+        document.addEventListener('touchmove', handleDragMove, { passive: false });
+        document.addEventListener('touchend', handleDragEnd);
 
         window.addEventListener('resize', () => {
             if (preview.src) {
@@ -226,21 +367,23 @@
             const ratio = getScaleRatio();
             const visualLeft = parseFloat(cropBox.style.left);
             const visualTop = parseFloat(cropBox.style.top);
-            const visualSize = parseFloat(cropBox.style.width);
+            const visualW = parseFloat(cropBox.style.width);
+            const visualH = parseFloat(cropBox.style.height);
 
             const sourceX = visualLeft / ratio;
             const sourceY = visualTop / ratio;
-            const sourceSize = visualSize / ratio;
+            const sourceW = visualW / ratio;
+            const sourceH = visualH / ratio;
 
             const canvas = document.createElement('canvas');
-            canvas.width = currentSize;
-            canvas.height = currentSize;
+            canvas.width = cropWidth;
+            canvas.height = cropHeight;
             const ctx = canvas.getContext('2d');
 
             ctx.drawImage(
                 preview,
-                sourceX, sourceY, sourceSize, sourceSize,
-                0, 0, currentSize, currentSize
+                sourceX, sourceY, sourceW, sourceH,
+                0, 0, cropWidth, cropHeight
             );
 
             const dataUrl = canvas.toDataURL('image/png');
