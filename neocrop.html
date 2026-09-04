@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoCrop Image Cropper</title>
+    <style>
+        :root {
+            --bg-yellow: #FFDF00;
+            --pure-white: #FFFFFF;
+            --hard-black: #000000;
+            border-width: 4px;
+        }
+        
+        body {
+            font-family: "Space Grotesk", "Courier New", monospace, sans-serif;
+            background-color: var(--bg-yellow);
+            color: var(--hard-black);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 800;
+        }
+
+        .controls {
+            background: var(--pure-white);
+            padding: 20px;
+            border: var(--border-width) solid var(--hard-black);
+            box-shadow: 8px 8px 0px var(--hard-black);
+            margin-bottom: 40px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button, input[type="file"]::file-selector-button {
+            background: var(--pure-white);
+            color: var(--hard-black);
+            border: 3px solid var(--hard-black);
+            padding: 12px 24px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 900;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 5px 5px 0px var(--hard-black);
+            transition: all 0.1s ease-in-out;
+        }
+
+        button:hover, input[type="file"]::file-selector-button:hover {
+            background: var(--bg-yellow);
+        }
+
+        button:active, input[type="file"]::file-selector-button:active {
+            transform: translate(5px, 5px);
+            box-shadow: 0px 0px 0px var(--hard-black);
+        }
+
+        button.active {
+            background: var(--hard-black);
+            color: var(--pure-white);
+        }
+
+        #downloadBtn {
+            background: var(--hard-black);
+            color: var(--pure-white);
+        }
+
+        #downloadBtn:hover {
+            background: var(--pure-white);
+            color: var(--hard-black);
+        }
+
+        #workspace {
+            position: relative;
+            display: none;
+            background: var(--pure-white);
+            border: var(--border-width) solid var(--hard-black);
+            box-shadow: 12px 12px 0px var(--hard-black);
+            max-width: 90vw;
+            max-height: 70vh;
+            padding: 0;
+            line-height: 0;
+        }
+
+        #preview {
+            display: block;
+            max-width: 100%;
+            max-height: 70vh;
+            user-select: none;
+        }
+
+        #cropBox {
+            position: absolute;
+            border: 4px dashed var(--pure-white);
+            outline: 4px dashed var(--hard-black);
+            background: rgba(255, 223, 0, 0.25);
+            cursor: crosshair;
+            box-sizing: border-box;
+            backdrop-filter: grayscale(20%);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <input type="file" id="fileInput" accept="image/png, image/jpeg, image/tiff">
+        <button id="btn512" class="active" onclick="setPreset(512)">512 × 512</button>
+        <button id="btn1024" onclick="setPreset(1024)">1024 × 1024</button>
+        <button id="downloadBtn" onclick="downloadCrop()">Download Crop</button>
+    </div>
+
+    <div id="workspace">
+        <img id="preview" draggable="false">
+        <div id="cropBox"></div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const workspace = document.getElementById('workspace');
+        const cropBox = document.getElementById('cropBox');
+        
+        let currentSize = 512;
+        let isDragging = false;
+        let startX, startY, boxLeft, boxTop;
+
+        function generateRandomName() {
+            const array = new Uint32Array(5);
+            window.crypto.getRandomValues(array); 
+            return Array.from(array, num => String.fromCharCode(97 + (num % 26))).join('') + '.png';
+        }
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                preview.src = event.target.result;
+                preview.onload = () => {
+                    workspace.style.display = 'inline-block';
+                    updateCropBoxSize();
+                    centerCropBox();
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function setPreset(size) {
+            currentSize = size;
+            document.getElementById('btn512').classList.toggle('active', size === 512);
+            document.getElementById('btn1024').classList.toggle('active', size === 1024);
+            if (preview.src) {
+                updateCropBoxSize();
+                centerCropBox();
+            }
+        }
+
+        function getScaleRatio() {
+            return preview.clientWidth / preview.naturalWidth;
+        }
+
+        function updateCropBoxSize() {
+            const ratio = getScaleRatio();
+            const visualSize = currentSize * ratio;
+            
+            const maxDimension = Math.min(preview.clientWidth, preview.clientHeight);
+            const finalSize = Math.min(visualSize, maxDimension);
+
+            cropBox.style.width = finalSize + 'px';
+            cropBox.style.height = finalSize + 'px';
+        }
+
+        function centerCropBox() {
+            const boxWidth = parseFloat(cropBox.style.width);
+            const left = (preview.clientWidth - boxWidth) / 2;
+            const top = (preview.clientHeight - boxWidth) / 2;
+            setCropBoxPos(left, top);
+        }
+
+        function setCropBoxPos(left, top) {
+            const boxWidth = parseFloat(cropBox.style.width);
+            left = Math.max(0, Math.min(left, preview.clientWidth - boxWidth));
+            top = Math.max(0, Math.min(top, preview.clientHeight - boxWidth));
+            
+            cropBox.style.left = left + 'px';
+            cropBox.style.top = top + 'px';
+        }
+
+        cropBox.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            boxLeft = parseFloat(cropBox.style.left) || 0;
+            boxTop = parseFloat(cropBox.style.top) || 0;
+            e.preventDefault(); 
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            setCropBoxPos(boxLeft + dx, boxTop + dy);
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        window.addEventListener('resize', () => {
+            if (preview.src) {
+                updateCropBoxSize();
+                centerCropBox();
+            }
+        });
+
+        function downloadCrop() {
+            if (!preview.src) return alert("Please upload an image first.");
+
+            const ratio = getScaleRatio();
+            const visualLeft = parseFloat(cropBox.style.left);
+            const visualTop = parseFloat(cropBox.style.top);
+            const visualSize = parseFloat(cropBox.style.width);
+
+            const sourceX = visualLeft / ratio;
+            const sourceY = visualTop / ratio;
+            const sourceSize = visualSize / ratio;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = currentSize;
+            canvas.height = currentSize;
+            const ctx = canvas.getContext('2d');
+
+            ctx.drawImage(
+                preview,
+                sourceX, sourceY, sourceSize, sourceSize,
+                0, 0, currentSize, currentSize
+            );
+
+            const dataUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = generateRandomName();
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
